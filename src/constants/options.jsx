@@ -50,4 +50,4 @@ export const SelectBudgetOptions = [
     },
 ]
 
-export const AI_PROMPT = 'Generate Travel plan for Location: {location}'
+export const AI_PROMPT ='Act As my personal travel planner and create a {days} day itinerary for {location} , considering i am travelling with {people} people with a {budget} budget around 400 USD for day (exclude flight ticket), give me a Hotels options list with HotelName, HotelAddress, Price, Hotel image url, geo coordinates, rating, descriptions, create an itinerary with placeName,PlaceDetails, place Image url, Geo coordinates, ticketPricing, rating , focusing on hunting Local Food or so called Hidden gem, and also other Activities that suites for people in JSON FORMAT'
