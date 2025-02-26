@@ -14,7 +14,7 @@ export const SelectTravelerList = [
         people: '2'
     },
     {
-        id:1,
+        id:3,
         title: 'Family',
         desc: 'A group of lovely family',
         icon: '🏠',
@@ -25,7 +25,7 @@ export const SelectTravelerList = [
         title: 'Friends',
         desc: 'A bunch of thrill seeks',
         icon: '👥',
-        people: '3 to 5 people'
+        people: '6 to 8 people'
     },
 ]
 
