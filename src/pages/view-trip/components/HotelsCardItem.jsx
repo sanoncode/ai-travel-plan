@@ -8,20 +8,20 @@ import { Link } from "react-router-dom";
 function HotelsCardItem({ hotel }) {
 
       const [photoUrl, setPhotoUrl] = useState()
-    
-      useEffect(()=>{
-        hotel&&GetPlacePhoto()
-      },[hotel])
-    
-      const GetPlacePhoto = async () => {
-        const data = {
-          textQuery: hotel?.hotelName
-        }
-         await GetPlaceDetails(data).then((resp)=>{
-          
-          const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[3].name)
-          setPhotoUrl(photoUrl)
-        })
+  
+        useEffect(()=>{
+          hotel&&GetPlacePhoto()
+        },[hotel])
+      
+        const GetPlacePhoto = async () => {
+          const data = {
+            textQuery: hotel?.hotelName
+          }
+          await GetPlaceDetails(data).then((resp)=>{
+            
+            const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[3].name)
+            setPhotoUrl(photoUrl)
+          })
       }
   return (
     <Link
@@ -37,7 +37,7 @@ function HotelsCardItem({ hotel }) {
         <div className="my-2">
           <h2 className="font-medium">{hotel.hotelName}</h2>
           <h2 className="text-xs text-gray-500">📍 {hotel.hotelAddress}</h2>
-          <h2 className="text-sm">$ {hotel?.price} per Night</h2>
+          <h2 className="text-sm">$ {hotel?.priceRange} per Night</h2>
           <h2 className="text-sm">⭐ {hotel?.rating}</h2>
         </div>
       </div>
