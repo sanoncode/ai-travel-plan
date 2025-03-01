@@ -20,7 +20,7 @@ function InfoSection({trip}) {
     }
      await GetPlaceDetails(data).then((resp)=>{
       
-      const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[3].name)
+      const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[1].name)
       setPhotoUrl(photoUrl)
     })
   }

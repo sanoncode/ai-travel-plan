@@ -1,27 +1,29 @@
 /* eslint-disable react/prop-types */
-import { GetPlaceDetails } from "@/service/GlobalApi";
-import { PHOTO_REF_URL } from "@/service/GlobalApi";
-import { useEffect, useState } from "react";
+
+import useGoogleImage from "@/hook/useGoogleImage"
 
 import { Link } from "react-router-dom"
 
 function UserTripCarditem({trip}) {
-   const [photoUrl, setPhotoUrl] = useState()
+
+    const photoUrl = useGoogleImage(trip.userSelection?.location?.label)
+
+  //  const [photoUrl, setPhotoUrl] = useState()
     
-          useEffect(()=>{
-            trip&&GetPlacePhoto()
-          },[trip])
+  //         useEffect(()=>{
+  //           trip&&GetPlacePhoto()
+  //         },[trip])
         
-          const GetPlacePhoto = async () => {
-            const data = {
-              textQuery: trip.userSelection?.location?.label
-            }
-            await GetPlaceDetails(data).then((resp)=>{
+  //         const GetPlacePhoto = async () => {
+  //           const data = {
+  //             textQuery: trip.userSelection?.location?.label
+  //           }
+  //           await GetPlaceDetails(data).then((resp)=>{
               
-              const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[3].name)
-              setPhotoUrl(photoUrl)
-            })
-        }
+  //             const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[1].name)
+  //             setPhotoUrl(photoUrl)
+  //           })
+  //       }
   return (
     <div className="hover:scale-105 hover:shadow-md transition-all p-4">
       <Link to={`/view-trip/${trip.id}`}>

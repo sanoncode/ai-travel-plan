@@ -22,7 +22,7 @@ function ViewTrip(){
         const docSnap = await getDoc(docRef)
 
         if(docSnap.exists()){
-            console.log('Document: ',docSnap.data())
+           
             setTrip(docSnap.data())
         }else{
             console.log('Document not exist')
