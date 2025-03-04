@@ -7,7 +7,7 @@ function useGoogleImage(label) {
      const [photoUrl, setPhotoUrl] = useState()
         
               useEffect(()=>{
-                GetPlacePhoto()
+                label&&GetPlacePhoto()
               },[label])
             
               const GetPlacePhoto = async () => {

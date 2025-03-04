@@ -15,6 +15,7 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import { googleLogout } from "@react-oauth/google";
 import { useGoogleLogin } from "@react-oauth/google";
+import Images from "./Images";
 
 
 function Header() {
@@ -63,12 +64,9 @@ function Header() {
           </a>
           <Popover>
             <PopoverTrigger>
-              <img
-                src={user?.picture}
-                className="h-[35px] w-[35px] rounded-full"
-                alt="userpic"
-                referrerPolicy="no-referrer"
-              />
+              <Images 
+               src={user?.picture}
+               className="h-[35px] w-[35px] rounded-full"/>
             </PopoverTrigger>
             <PopoverContent>
               <h2
