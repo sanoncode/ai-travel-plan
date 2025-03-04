@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 // /* eslint-disable react/prop-types */
 
+import Images from "@/components/custom/Images";
 import useGoogleImage from "@/hook/useGoogleImage"
 
 import { Link } from "react-router-dom";
@@ -31,12 +32,11 @@ function HotelsCardItem({ hotel }) {
       target="_BLANK"
     >
       <div className="hover:scale-105 transition-all">
-        <img
-          src={photoUrl}
-          className="rounded-lg h-[180px] w-full object-cover"
-          alt="placeholderhotel"
-          loading="Lazy"
-          referrerPolicy="no-referrer"
+    
+        <Images 
+         src={photoUrl}
+         className="rounded-lg h-[180px] w-full object-cover"
+         alt="hotelCardItem"
         />
         <div className="my-2">
           <h2 className="font-medium">{hotel.hotelName}</h2>
