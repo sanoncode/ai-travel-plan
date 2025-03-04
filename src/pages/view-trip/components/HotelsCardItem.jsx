@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // /* eslint-disable react/prop-types */
 
 import useGoogleImage from "@/hook/useGoogleImage"
@@ -35,6 +36,7 @@ function HotelsCardItem({ hotel }) {
           className="rounded-lg h-[180px] w-full object-cover"
           alt="placeholderhotel"
           loading="Lazy"
+          referrerPolicy="no-referrer"
         />
         <div className="my-2">
           <h2 className="font-medium">{hotel.hotelName}</h2>

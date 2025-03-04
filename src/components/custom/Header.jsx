@@ -67,6 +67,7 @@ function Header() {
                 src={user?.picture}
                 className="h-[35px] w-[35px] rounded-full"
                 alt="userpic"
+                referrerPolicy="no-referrer"
               />
             </PopoverTrigger>
             <PopoverContent>

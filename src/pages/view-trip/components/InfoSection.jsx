@@ -26,7 +26,7 @@ function InfoSection({trip}) {
   }
   return (
     <div>
-      <img src={photoUrl} alt='placeimage' className="h-[300px] w-full object-cover rounded-lg"/>
+      <img src={photoUrl} alt='placeimage' referrerPolicy="no-referrer" className="h-[300px] w-full object-cover rounded-lg"/>
       <div className="flex justify-between items-center">
       <div className="flex flex-col my-5 gap-2">
           <h2 className="font-bold text-2xl">
