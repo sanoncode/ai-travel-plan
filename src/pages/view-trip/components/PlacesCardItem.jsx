@@ -8,22 +8,7 @@ import useGoogleImage from "@/hook/useGoogleImage"
 function PlacesCardItem({ activity }) {
 
   const photoUrl = useGoogleImage(activity.placeName)
-      // const [photoUrl, setPhotoUrl] = useState()
-        
-      //     useEffect(()=>{
-      //       activity&&GetPlacePhoto()
-      //     },[ activity])
-        
-      //     const GetPlacePhoto = async () => {
-      //       const data = {
-      //         textQuery: activity.placeName
-      //       }
-      //        await GetPlaceDetails(data).then((resp)=>{
-              
-      //         const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[1].name)
-      //         setPhotoUrl(photoUrl)
-      //       })
-      //   }
+  
   return (
     <Link to={'https://www.google.com/maps/search/?api=1&query='+activity.placeName} target="_BLANK">
     <div className="border rounded-xl p-2 mt-2 flex gap-5 hover:scale-105 hover:shadow-md cursor-pointer transition-all">

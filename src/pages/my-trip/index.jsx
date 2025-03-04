@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigation } from "react-router-dom";
 import UserTripCarditem from "./components/UserTripCarditem";
-import Skeleton from './components/Skeleton'
+import { SkeletonCard } from './components/SkeletonCard'
 
 function MyTrip() {
   const navigate = useNavigation();
@@ -42,7 +42,7 @@ function MyTrip() {
           ? userTrips.map((trip, index) => (
               <UserTripCarditem key={index} trip={trip} />
             ))
-          : <Skeleton />
+          : <SkeletonCard />
           }
       </div>
     </div>

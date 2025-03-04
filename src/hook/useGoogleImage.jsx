@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 function useGoogleImage(label) {
 
-     const [photoUrl, setPhotoUrl] = useState()
+     const [photoUrl, setPhotoUrl] = useState("/placeholder.jpg")
         
               useEffect(()=>{
                 label&&GetPlacePhoto()
