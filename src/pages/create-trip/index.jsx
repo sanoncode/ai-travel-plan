@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {AILoadingDialog} from './components/AiLoadingDialog'
 import {
   AI_PROMPT,
   SelectBudgetOptions,
@@ -27,7 +28,9 @@ import { useNavigate } from "react-router-dom";
 function CreateTrip() {
   const [place, setplace] = useState();
   const [formData, setformData] = useState([]);
-  const [openDialog, setopenDialog] = useState(false);
+  const [openLoginDialog, setopenLoginDialog] = useState(false);
+  const [openGenerateDialog, setopenGenerateDialog] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
@@ -42,7 +45,7 @@ function CreateTrip() {
     
     const user = localStorage.getItem("user");
     if (!user) {
-      setopenDialog(true);
+      setopenLoginDialog(true);
       return;
     }
     // implement validation for days, maximum 5 days
@@ -54,18 +57,23 @@ function CreateTrip() {
       toast("please fill all the fields");
       return;
     }
-    setLoading(true);
-    const FINAL_PROMPT = AI_PROMPT.replace(
-      "{location}",
-      formData?.location?.label
-    )
-      .replace("{days}", formData?.days)
-      .replace("{people}", formData?.people)
-      .replace("{budget}", formData?.budget);
+    setGenerating(true);
+    setopenGenerateDialog(true)
 
-    const result = await chatSession.sendMessage(FINAL_PROMPT)
-    SaveAiTrip(result?.response?.text());
-    setLoading(false);
+    setTimeout(() => {
+      setGenerating(false)
+    }, 50000)
+    // const FINAL_PROMPT = AI_PROMPT.replace(
+    //   "{location}",
+    //   formData?.location?.label
+    // )
+    //   .replace("{days}", formData?.days)
+    //   .replace("{people}", formData?.people)
+    //   .replace("{budget}", formData?.budget);
+
+    // const result = await chatSession.sendMessage(FINAL_PROMPT)
+    // SaveAiTrip(result?.response?.text());
+    // setLoading(false);
   };
 
   const SaveAiTrip = async (TripData) => {
@@ -101,7 +109,7 @@ function CreateTrip() {
       )
       .then((response) => {
         localStorage.setItem("user", JSON.stringify(response.data));
-        setopenDialog(false);
+        setopenLoginDialog(false);
         OnGenerateTrip();
       });
   };
@@ -187,8 +195,8 @@ function CreateTrip() {
         </div>
       </div>
       <div className="my-10 flex justify-end">
-        <Button onClick={OnGenerateTrip} disabled={loading}>
-          {loading ? (
+        <Button onClick={OnGenerateTrip} disabled={generating}>
+          {generating ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
           ) : (
             "Generate Trip"
@@ -196,7 +204,7 @@ function CreateTrip() {
         </Button>
       </div>
 
-      <Dialog open={openDialog}>
+      <Dialog open={openLoginDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
@@ -213,6 +221,13 @@ function CreateTrip() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
+
+        <AILoadingDialog
+          open={openGenerateDialog}
+          onOpenChange={setopenGenerateDialog}
+          generating={generating}
+          onCancel={() => setGenerating(false)}
+        />
     </div>
   );
 }
