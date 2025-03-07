@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 function UserTripCarditem({trip}) {
 
     const photoUrl = useGoogleImage(trip.userSelection?.location?.label)
+  
 
   return (
     <div className="hover:scale-105 hover:shadow-md transition-all p-4">

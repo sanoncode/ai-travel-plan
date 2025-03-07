@@ -24,6 +24,7 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
+import { serverTimestamp } from "firebase/firestore";
 
 function CreateTrip() {
   const [place, setplace] = useState();
@@ -31,7 +32,9 @@ function CreateTrip() {
   const [openLoginDialog, setopenLoginDialog] = useState(false);
   const [openGenerateDialog, setopenGenerateDialog] = useState(false);
   const [generating, setGenerating] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [viewTripId, setViewTripId] = useState();
+  
+
   const navigate = useNavigate()
 
   const HandleInputchange = (name, value) => {
@@ -60,35 +63,33 @@ function CreateTrip() {
     setGenerating(true);
     setopenGenerateDialog(true)
 
-    setTimeout(() => {
-      setGenerating(false)
-    }, 50000)
-    // const FINAL_PROMPT = AI_PROMPT.replace(
-    //   "{location}",
-    //   formData?.location?.label
-    // )
-    //   .replace("{days}", formData?.days)
-    //   .replace("{people}", formData?.people)
-    //   .replace("{budget}", formData?.budget);
+    const FINAL_PROMPT = AI_PROMPT.replace(
+      "{location}",
+      formData?.location?.label
+    )
+      .replace("{days}", formData?.days)
+      .replace("{people}", formData?.people)
+      .replace("{budget}", formData?.budget);
 
-    // const result = await chatSession.sendMessage(FINAL_PROMPT)
-    // SaveAiTrip(result?.response?.text());
-    // setLoading(false);
+    const result = await chatSession.sendMessage(FINAL_PROMPT)
+    SaveAiTrip(result?.response?.text());
   };
 
   const SaveAiTrip = async (TripData) => {
-    setLoading(true);
+  
     const docId = Date.now().toString();
     const user = JSON.parse(localStorage.getItem("user"));
     const Tripdata = JSON.parse(TripData)
-    await setDoc(doc(db, "trip", docId), {
+     await setDoc(doc(db, "trip", docId), {
       id: docId,
       userSelection: formData,
       tripData: Tripdata,
       userEmail: user?.email,
+      createdAt: serverTimestamp()
     });
-    setLoading(false);
-    navigate('/view-trip/'+docId)
+   
+    setViewTripId(docId)
+    setGenerating(false);
   };
 
   const GoogleLogin = useGoogleLogin({
@@ -227,6 +228,7 @@ function CreateTrip() {
           onOpenChange={setopenGenerateDialog}
           generating={generating}
           onCancel={() => setGenerating(false)}
+          viewTripId={viewTripId}
         />
     </div>
   );

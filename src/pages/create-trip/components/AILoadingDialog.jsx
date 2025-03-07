@@ -4,7 +4,8 @@
 import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Loader2, CheckCircle2, BrainCircuit } from "lucide-react"
+import { Loader2, CheckCircle2,} from "lucide-react"
+import { Link } from "react-router-dom"
 
 const generationSteps = [
   "Analyzing request and planning response",
@@ -15,7 +16,7 @@ const generationSteps = [
   "Finalizing and preparing delivery",
 ]
 
-export function AILoadingDialog({ open, onOpenChange, generating, onCancel }) {
+export function AILoadingDialog({ open, generating, onCancel, viewTripId }) {
   const [currentStep, setCurrentStep] = useState(0)
 
   useEffect(() => {
@@ -42,33 +43,22 @@ export function AILoadingDialog({ open, onOpenChange, generating, onCancel }) {
     }
   }, [generating])
 
-  // Close dialog after completion with a small delay
-  useEffect(() => {
-    if (!generating && currentStep === generationSteps.length - 1) {
-      const timeout = setTimeout(() => {
-        onOpenChange(false)
-      }, 1500)
-
-      return () => clearTimeout(timeout)
-    }
-  }, [generating, currentStep, onOpenChange])
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} >
       <DialogContent className="sm:max-w-md">
         <div className="flex flex-col items-center space-y-6 py-4">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10">
+          <div className="flex items-center justify-center w-full rounded-full">
             {generating ? (
-              <BrainCircuit className="h-8 w-8 text-primary animate-pulse" />
+              <img src="/placeholder.jpg" className="h-[300px] w-full p-2" />
             ) : (
               <CheckCircle2 className="h-8 w-8 text-green-500" />
             )}
           </div>
 
           <div className="text-center space-y-2">
-            <h3 className="text-lg font-medium">{generating ? "Generating Content" : "Generation Complete"}</h3>
+            <h3 className="text-lg font-medium">{generating ? "Creating a travel plan for you" : "Completed !"}</h3>
             <p className="text-sm text-muted-foreground">
-              {generating ? "Please wait while our AI creates your content" : "Your content is ready to view"}
+              {generating ? "Please wait while our AI creates your Travel Plan" : "Your Travel Plan is ready to view"}
             </p>
           </div>
 
@@ -112,9 +102,11 @@ export function AILoadingDialog({ open, onOpenChange, generating, onCancel }) {
               Cancel Generation
             </Button>
           ) : (
-            <Button onClick={() => onOpenChange(false)}>View Content</Button>
+            <Link to={'/view-trip/'+viewTripId}>
+            <Button>View the plan !</Button>
+            </Link>
           )}
-        </div>
+        </div> 
       </DialogContent>
     </Dialog>
   )
