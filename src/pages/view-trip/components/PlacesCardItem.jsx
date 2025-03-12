@@ -6,7 +6,6 @@ import Images from "@/components/custom/Images";
 import useGoogleImage from "@/hook/useGoogleImage"
 
 function PlacesCardItem({ activity }) {
-
   const photoUrl = useGoogleImage(activity.placeName)
   
   return (

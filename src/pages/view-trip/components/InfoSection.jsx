@@ -3,12 +3,32 @@
 import { Button } from "@/components/ui/button"
 import { GetPlaceDetails } from "@/service/GlobalApi";
 import { useEffect, useState } from "react";
-import { IoIosSend } from "react-icons/io";
+import { MdDeleteForever } from "react-icons/md";
 import { PHOTO_REF_URL } from "@/service/GlobalApi";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "@/service/firebaseConfig";
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Loader2 } from "lucide-react"
+import { Link } from "react-router-dom";
+
+
 
 function InfoSection({trip}) {
+  
 
   const [photoUrl, setPhotoUrl] = useState()
+  const [deleted, setDeleted] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(()=>{
     trip&&GetPlacePhoto()
@@ -24,6 +44,16 @@ function InfoSection({trip}) {
       setPhotoUrl(photoUrl)
     })
   }
+  
+
+  const DeleteTrip = async () => {
+    
+      setDeleting(true)
+      await deleteDoc(doc(db, "trip", trip.id));
+      setDeleted(true)
+      setDeleting(false)
+      
+    }
   return (
     <div>
       <img src={photoUrl} alt='placeimage' referrerPolicy="no-referrer" className="h-[300px] w-full object-cover rounded-lg"/>
@@ -38,7 +68,43 @@ function InfoSection({trip}) {
           <h2 className="p-1 px-3 bg-gray-200 rounded-full text-gray-500 text-sm md:text-md">🧑🏼‍🤝‍🧑🏼 No. Of traveler{trip.userSelection?.people} People</h2>
          </div>
       </div>
-      <Button><IoIosSend /></Button>
+      <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline"><MdDeleteForever className="h-28 w-28" color="red" /></Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Delete This Trip ?</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete this trip?
+          </DialogDescription>
+        </DialogHeader>
+        
+        <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Cancel
+            </Button>
+          </DialogClose>
+            {deleted ? (
+              <Link to='/create-trip'>
+              <Button type="button">
+              Lets Create another trip
+            </Button>
+            </Link>
+            ) : (
+              <Button type="button" disabled={deleting} variant="destructive" onClick={() => DeleteTrip()}>
+              {deleting ? (
+                 <Loader2 className="animate-spin" />
+              ):(
+               "Yes i want to delete"
+              )}
+            </Button>
+            ) }
+          
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
       </div>
     </div>
   )
