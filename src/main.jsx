@@ -9,6 +9,7 @@ import App from "./App";
 import CreateTrip from "./pages/create-trip";
 import ViewTrip from "./pages/view-trip/[tripid]";
 import MyTrip from "./pages/my-trip";
+import TravelPlanner from "./pages/view-trip-2";
 import Header from "./components/custom/Header";
 import { Toaster } from "./components/ui/sonner";
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/view-trip/:tripid",
     element: <ViewTrip/>
+  },
+  {
+    path: "/view-trip-2",
+    element: <TravelPlanner/>
   },
   {
     path: "/my-trip",

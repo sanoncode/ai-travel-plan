@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { GetPlaceDetails } from "@/service/GlobalApi";
 import { useEffect, useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
-import { PHOTO_REF_URL } from "@/service/GlobalApi";
+// import { PHOTO_REF_URL } from "@/service/GlobalApi";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "@/service/firebaseConfig";
 
@@ -26,24 +26,24 @@ import { Link } from "react-router-dom";
 function InfoSection({trip}) {
   
 
-  const [photoUrl, setPhotoUrl] = useState()
+  // const [photoUrl, setPhotoUrl] = useState()
   const [deleted, setDeleted] = useState(false)
   const [deleting, setDeleting] = useState(false)
 
-  useEffect(()=>{
-    trip&&GetPlacePhoto()
-  },[trip])
+  // useEffect(()=>{
+  //   trip&&GetPlacePhoto()
+  // },[trip])
 
-  const GetPlacePhoto = async () => {
-    const data = {
-      textQuery: trip?.userSelection?.location?.label
-    }
-     await GetPlaceDetails(data).then((resp)=>{
+  // const GetPlacePhoto = async () => {
+  //   const data = {
+  //     textQuery: trip?.userSelection?.location?.label
+  //   }
+  //    await GetPlaceDetails(data).then((resp)=>{
       
-      const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[1].name)
-      setPhotoUrl(photoUrl)
-    })
-  }
+  //     const photoUrl = PHOTO_REF_URL.replace('{NAME}', resp.data.places[0].photos[1].name)
+  //     setPhotoUrl(photoUrl)
+  //   })
+  // }
   
 
   const DeleteTrip = async () => {
@@ -56,7 +56,7 @@ function InfoSection({trip}) {
     }
   return (
     <div>
-      <img src={photoUrl} alt='placeimage' referrerPolicy="no-referrer" className="h-[300px] w-full object-cover rounded-lg"/>
+      <img src={""} alt='placeimage' referrerPolicy="no-referrer" className="h-[300px] w-full object-cover rounded-lg"/>
       <div className="flex justify-between items-center">
       <div className="flex flex-col my-5 gap-2">
           <h2 className="font-bold text-2xl">

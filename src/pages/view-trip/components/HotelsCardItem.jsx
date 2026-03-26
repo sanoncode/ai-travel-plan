@@ -2,13 +2,13 @@
 // /* eslint-disable react/prop-types */
 
 import Images from "@/components/custom/Images";
-import useGoogleImage from "@/hook/useGoogleImage"
+// import useGoogleImage from "@/hook/useGoogleImage"
 
 import { Link } from "react-router-dom";
 
 function HotelsCardItem({ hotel }) {
 
-  const photoUrl = useGoogleImage(hotel?.hotelName)
+  // const photoUrl = useGoogleImage(hotel?.hotelName)
   
   return (
     <Link
@@ -18,7 +18,7 @@ function HotelsCardItem({ hotel }) {
       <div className="hover:scale-105 transition-all">
     
         <Images 
-         src={photoUrl}
+         src={""}
          className="rounded-lg h-[180px] w-full object-cover"
          alt="hotelCardItem"
         />
