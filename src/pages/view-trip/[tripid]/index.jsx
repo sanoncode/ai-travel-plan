@@ -36,7 +36,7 @@ export default function ViewTrip() {
       <TripHeader header={trip} />
 
       {/* Day 1 */}
-      {/* <TripItinerary itinerary={trip} /> */}
+      <TripItinerary itinerary={trip} />
 
       {/* Notes section */}
       <TripNotes notes={trip} />
