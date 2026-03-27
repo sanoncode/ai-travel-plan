@@ -1,17 +1,15 @@
-import { useParams } from "react-router-dom"
-import {db} from '@/service/firebaseConfig'
-import { doc, getDoc } from 'firebase/firestore'
-import { toast } from "sonner"
+"use client"
+
 import { useEffect, useState } from "react"
-import InfoSection from "../components/InfoSection"
-import Hotels from "../components/Hotels"
-import PlacesToVisit from "../components/PlacesToVisit"
-import Footer from "../components/Footer"
+import { useParams } from "react-router-dom"
+import { db } from '@/service/firebaseConfig'
+import { doc, getDoc } from 'firebase/firestore'
 
-function ViewTrip(){
-    const {tripid }= useParams()
+import { TripHeader, TripItinerary, TripBudget, TripNotes } from "../components"
+export default function ViewTrip() {
+  const {tripid }= useParams()
 
-    const [trip, setTrip] = useState([])
+    const [trip, setTrip] = useState({})
 
     useEffect(()=>{
         tripid && GetTripData()
@@ -29,19 +27,23 @@ function ViewTrip(){
             toast('No Trip Found !')
         }
     }
-    
+
   return (
-    <div className="p-10 sm:px-20 lg:px-44 xl:px-56">
-      {/* info section */}
-       <InfoSection trip={trip} />
-       {/* recommended hotel */}
-        <Hotels trip={trip} />
-       {/* daily plan */}
-       <PlacesToVisit trip={trip} />
-       {/* footer */}
-       <Footer />
+    <div className="max-w-4xl mx-auto p-6 space-y-8 font-sans">
+
+
+      {/* Header */}
+      <TripHeader header={trip} />
+
+      {/* Day 1 */}
+      {/* <TripItinerary itinerary={trip} /> */}
+
+      {/* Notes section */}
+      <TripNotes notes={trip} />
+
+      {/* Budget summary */}
+      <TripBudget budget={trip} />
     </div>
   )
 }
 
-export default ViewTrip

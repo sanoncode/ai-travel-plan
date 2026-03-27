@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
   const genAI = new GoogleGenerativeAI(apiKey);
   
   const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-pro",
+    model: "gemini-3-flash-preview",
   });
   
   const generationConfig = {

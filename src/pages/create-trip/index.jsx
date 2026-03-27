@@ -9,7 +9,10 @@ import {
 import { chatSession } from "@/service/AImodel";
 import axios from "axios";
 import { useState } from "react";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+
+import { CountrySelect, StateSelect } from "react-country-state-city";
+import "react-country-state-city/dist/react-country-state-city.css";
+
 import { toast } from "sonner";
 import { useGoogleLogin } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
@@ -53,7 +56,7 @@ function CreateTrip() {
     }
     // implement validation for days, maximum 5 days
     if (
-      (formData?.days > 5 && !formData?.location) ||
+      (formData?.days > 5 && !formData?.country) ||
       !formData?.budget ||
       !formData?.people
     ) {
@@ -64,9 +67,9 @@ function CreateTrip() {
     setopenGenerateDialog(true)
 
     const FINAL_PROMPT = AI_PROMPT.replace(
-      "{location}",
-      formData?.location?.label
-    )
+      "{country}",
+      formData?.country?.name
+    ).replace("{state}", formData?.state?.name)
       .replace("{days}", formData?.days)
       .replace("{people}", formData?.people)
       .replace("{budget}", formData?.budget);
@@ -129,16 +132,20 @@ function CreateTrip() {
           <h2 className="text-xl my-3 font-medium">
             What is destination of choice?
           </h2>
-          <GooglePlacesAutocomplete
-            apiKey={import.meta.env.VITE_GOOGLE_PLACE_API}
-            selectProps={{
-              place,
-              onChange: (v) => {
-                setplace(v);
-                HandleInputchange("location", v);
-              },
-            }}
+      <div className="flex gap-5">
+          <CountrySelect
+            onChange={(country) => HandleInputchange("country", country)}
+            defaultValue={formData.country}
+            placeHolder="Select Country"
           />
+      
+              <StateSelect
+            countryid={formData.country?.id}
+            onChange={(state) => HandleInputchange("state", state)}
+            defaultValue={formData.state}
+            placeHolder="Select State"
+          />
+          </div>
         </div>
       </div>
       <div className="mt-10">
@@ -163,9 +170,9 @@ function CreateTrip() {
             <div
               key={index}
               className={`p-4 border rounded-lg hover:shadow-lg ${
-                formData.budget === item.title && "shadow-lg border-black"
+                formData.budget === item.desc && "shadow-lg border-black"
               }`}
-              onClick={() => HandleInputchange("budget", item.title)}
+              onClick={() => HandleInputchange("budget", item.desc)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
               <h2 className="font-bold text-lg">{item.title}</h2>
