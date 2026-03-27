@@ -12,6 +12,7 @@ import {
   ChevronDown,
   ChevronRight,
   Train,
+  Car
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -72,6 +73,17 @@ function TripItinerary({itinerary}){
     )
   }
 
+  const iconMap = {
+  food: <Utensils className="h-5 w-5 text-fuchsia-500 mt-0.5" />,
+  attraction: <Camera className="h-5 w-5 text-red-500 mt-0.5" />,
+  hotel: <Hotel className="h-5 w-5 text-blue-500 mt-0.5" />,
+  train: <Train className="h-5 w-5 text-green-500 mt-0.5" />,
+  transport: <Car className="h-5 w-5 text-purple-500 mt-0.5" />,
+  event: <Ticket className="h-5 w-5 text-orange-500 mt-0.5" />,
+  default: <MapPin className="h-5 w-5 text-amber-500 mt-0.5" />
+};
+
+
       return sorted.map(([day, activities], index) => (
           <Collapsible key={index} open={openDays[day]} onOpenChange={() => toggleDay(day.day)} className="border rounded-lg">
           <CollapsibleTrigger asChild>
@@ -95,52 +107,25 @@ function TripItinerary({itinerary}){
                     <div className="text-sm text-muted-foreground">Morning</div>
   
                     <div className="pl-4 space-y-4">
-                      <div className="p-3 border rounded-md bg-muted/20">
+                      {activities['Morning'].map((activity, index) => (
+                      <div key={index+"a"} className="p-3 border rounded-md bg-muted/20">
                         <div className="flex justify-between items-start">
                           <div className="flex gap-2">
-                            <Plane className="h-5 w-5 text-blue-500 mt-0.5" />
+                            {iconMap[activity.type.toLowerCase()] || iconMap['default']}
                             <div>
-                              <div className="font-medium">Arrive at Narita International Airport</div>
-                              <div className="text-sm text-muted-foreground mt-1">Flight NH123 - Terminal 2</div>
+                              <div className="font-medium">{activity.title}</div>
+                              <div className="text-sm text-muted-foreground mt-1">{activity.description}</div>
+                              <div className="flex items-center mt-1.5">
+                                <PriceRange level={activity.price_level} />
+                                <span className="text-xs text-muted-foreground ml-2">{activity.cost_local}</span>
+                              </div>
                             </div>
                           </div> 
-                          <div className="text-sm font-medium">7:30 AM</div>
+                          <div className="text-sm font-medium">{activity.time}</div>
                         </div>
                       </div>
-
-                      <div className="p-3 border rounded-md bg-muted/20">
-                        <div className="flex justify-between items-start">
-                          <div className="flex gap-2">
-                            <Train className="h-5 w-5 text-green-500 mt-0.5" />
-                            <div>
-                              <div className="font-medium">Narita Express to Shinjuku Station</div>
-                              <div className="text-sm text-muted-foreground mt-1">1 hour transit</div>
-                              <div className="flex items-center mt-1.5">
-                                <PriceRange level={2} />
-                                <span className="text-xs text-muted-foreground ml-2">¥3,270 per person</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-sm font-medium">9:00 AM</div>
-                        </div>
-                      </div>
-
-                      <div className="p-3 border rounded-md bg-muted/20">
-                        <div className="flex justify-between items-start">
-                          <div className="flex gap-2">
-                            <Hotel className="h-5 w-5 text-purple-500 mt-0.5" />
-                            <div>
-                              <div className="font-medium">Check-in at Hotel Century Southern Tower</div>
-                              <div className="text-sm text-muted-foreground mt-1">Early check-in arranged</div>
-                              <div className="flex items-center mt-1.5">
-                                <PriceRange level={3} />
-                                <span className="text-xs text-muted-foreground ml-2">¥25,000 per night</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-sm font-medium">10:30 AM</div>
-                        </div>
-                      </div>
+                    
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -154,58 +139,26 @@ function TripItinerary({itinerary}){
                     <div className="text-sm text-muted-foreground">Afternoon</div>
 
                     <div className="pl-4 space-y-4">
-                      <div className="p-3 border rounded-md bg-muted/20">
+                       {activities['Afternoon'].map((activity, index) => (
+                      <div key={index+"a"} className="p-3 border rounded-md bg-muted/20">
                         <div className="flex justify-between items-start">
                           <div className="flex gap-2">
-                            <Utensils className="h-5 w-5 text-amber-500 mt-0.5" />
+                            {iconMap[activity.type.toLowerCase()] || null}
                             <div>
-                              <div className="font-medium">Lunch at Ichiran Ramen</div>
-                              <div className="text-sm text-muted-foreground mt-1">Famous tonkotsu ramen chain</div>
+                              <div className="font-medium">{activity.title}</div>
+                              <div className="text-sm text-muted-foreground mt-1">{activity.description}</div>
                               <div className="flex items-center mt-1.5">
-                                <PriceRange level={2} />
-                                <span className="text-xs text-muted-foreground ml-2">¥1,200-1,500 per person</span>
+                                <PriceRange level={activity.price_level} />
+                                <span className="text-xs text-muted-foreground ml-2">{activity.cost_local}</span>
                               </div>
                             </div>
-                          </div>
-                          <div className="text-sm font-medium">12:30 PM</div>
+                          </div> 
+                          <div className="text-sm font-medium">{activity.time}</div>
                         </div>
                       </div>
+                    
+                      ))}
 
-                      <div className="p-3 border rounded-md bg-muted/20">
-                        <div className="flex justify-between items-start">
-                          <div className="flex gap-2">
-                            <Camera className="h-5 w-5 text-red-500 mt-0.5" />
-                            <div>
-                              <div className="font-medium">Meiji Shrine & Yoyogi Park</div>
-                              <div className="text-sm text-muted-foreground mt-1">Tranquil shrine in a forest setting</div>
-                              <div className="flex items-center mt-1.5">
-                                <PriceRange level={1} />
-                                <span className="text-xs text-muted-foreground ml-2">
-                                  Free entrance (¥500 for special areas)
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-sm font-medium">2:00 PM</div>
-                        </div>
-                      </div>
-
-                      <div className="p-3 border rounded-md bg-muted/20">
-                        <div className="flex justify-between items-start">
-                          <div className="flex gap-2">
-                            <MapPin className="h-5 w-5 text-blue-500 mt-0.5" />
-                            <div>
-                              <div className="font-medium">Harajuku & Takeshita Street</div>
-                              <div className="text-sm text-muted-foreground mt-1">Trendy shopping district</div>
-                              <div className="flex items-center mt-1.5">
-                                <PriceRange level={2} />
-                                <span className="text-xs text-muted-foreground ml-2">Varies (shopping)</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-sm font-medium">4:00 PM</div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -219,43 +172,25 @@ function TripItinerary({itinerary}){
                     <div className="text-sm text-muted-foreground">Evening</div>
 
                     <div className="pl-4 space-y-4">
-                      <div className="p-3 border rounded-md bg-muted/20">
+                       {activities['Evening'].map((activity, index) => (
+                      <div key={index+"a"} className="p-3 border rounded-md bg-muted/20">
                         <div className="flex justify-between items-start">
                           <div className="flex gap-2">
-                            <Utensils className="h-5 w-5 text-amber-500 mt-0.5" />
+                            {iconMap[activity.type.toLowerCase()] || null}
                             <div>
-                              <div className="font-medium">Dinner at Gonpachi Nishi-Azabu</div>
-                              <div className="text-sm text-muted-foreground mt-1">
-                                Inspiration for Kill Bill restaurant scene
-                              </div>
+                              <div className="font-medium">{activity.title}</div>
+                              <div className="text-sm text-muted-foreground mt-1">{activity.description}</div>
                               <div className="flex items-center mt-1.5">
-                                <PriceRange level={3} />
-                                <span className="text-xs text-muted-foreground ml-2">¥4,000-6,000 per person</span>
+                                <PriceRange level={activity.price_level} />
+                                <span className="text-xs text-muted-foreground ml-2">{activity.cost_local}</span>
                               </div>
                             </div>
-                          </div>
-                          <div className="text-sm font-medium">7:00 PM</div>
+                          </div> 
+                          <div className="text-sm font-medium">{activity.time}</div>
                         </div>
                       </div>
-
-                      <div className="p-3 border rounded-md bg-muted/20">
-                        <div className="flex justify-between items-start">
-                          <div className="flex gap-2">
-                            <MapPin className="h-5 w-5 text-violet-500 mt-0.5" />
-                            <div>
-                              <div className="font-medium">Shibuya Crossing & Nightlife</div>
-                              <div className="text-sm text-muted-foreground mt-1">
-                                Famous scramble crossing and evening exploration
-                              </div>
-                              <div className="flex items-center mt-1.5">
-                                <PriceRange level={1} />
-                                <span className="text-xs text-muted-foreground ml-2">Free (viewing)</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-sm font-medium">9:00 PM</div>
-                        </div>
-                      </div>
+                    
+                      ))}
                     </div>
                   </div>
                 </div>
