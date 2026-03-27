@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {AILoadingDialog} from './components/AiLoadingDialog'
+import { AILoadingDialog } from "./components/AILoadingDialog";
 import {
   AI_PROMPT,
   SelectBudgetOptions,
