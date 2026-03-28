@@ -36,11 +36,20 @@ function CreateTrip() {
   const [openGenerateDialog, setopenGenerateDialog] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [viewTripId, setViewTripId] = useState();
-  
+  const [limitDays, setlimitDays] = useState(false);
 
   const navigate = useNavigate()
 
   const HandleInputchange = (name, value) => {
+
+      // implement validation for days, maximum 7 days
+    if ( name === "days" && (value > 7 || value < 1) ) {
+       toast("Please enter a value between 1 and 7 for days");
+       setlimitDays(true)
+      return;
+    }else {
+      setlimitDays(false)
+    }
     setformData({
       ...formData,
       [name]: value,
@@ -54,9 +63,10 @@ function CreateTrip() {
       setopenLoginDialog(true);
       return;
     }
-    // implement validation for days, maximum 5 days
-    if (
-      (formData?.days > 5 && !formData?.country) ||
+  
+    // implement validation to check if country, people, budget are selected
+     if (
+      !formData?.country ||
       !formData?.budget ||
       !formData?.people
     ) {
@@ -156,6 +166,9 @@ function CreateTrip() {
           <Input
             placeholder={"Ex. 3"}
             type="number"
+            className={limitDays ? "border-red-500 border-s" : "border-gray-300"}
+              min={1} 
+              max={7} 
             onChange={(e) => HandleInputchange("days", e.target.value)}
           />
         </div>
@@ -203,7 +216,7 @@ function CreateTrip() {
         </div>
       </div>
       <div className="my-10 flex justify-end">
-        <Button onClick={OnGenerateTrip} disabled={generating}>
+        <Button onClick={OnGenerateTrip} disabled={(limitDays || generating)}>
           {generating ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
           ) : (
