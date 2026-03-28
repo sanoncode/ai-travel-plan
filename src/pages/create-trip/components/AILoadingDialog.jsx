@@ -2,10 +2,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button"
 import { Loader2, CheckCircle2,} from "lucide-react"
 import { Link } from "react-router-dom"
+
 
 const generationSteps = [
   "Analyzing request and planning response",
@@ -44,7 +50,7 @@ export function AILoadingDialog({ open, generating, onCancel, viewTripId }) {
   }, [generating])
 
   return (
-    <Dialog open={open} >
+    <Dialog open={open} onOpenchange={open}>
       <DialogContent className="sm:max-w-md">
         <div className="flex flex-col items-center space-y-6 py-4">
           <div className="flex items-center justify-center w-full rounded-full">
@@ -56,10 +62,10 @@ export function AILoadingDialog({ open, generating, onCancel, viewTripId }) {
           </div>
 
           <div className="text-center space-y-2">
-            <h3 className="text-lg font-medium">{generating ? "Creating a travel plan for you" : "Completed !"}</h3>
-            <p className="text-sm text-muted-foreground">
-              {generating ? "Please wait while our AI creates your Travel Plan" : "Your Travel Plan is ready to view"}
-            </p>
+            <DialogTitle className="text-lg font-medium">{generating ? "Creating a travel plan for you" : "Completed !"}</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">
+              {generating ? "DialogDescriptionlease wait while our AI creates your Travel Plan" : "Your Travel Plan is ready to view"}
+            </DialogDescription>
           </div>
 
           <div className="w-full space-y-4">
