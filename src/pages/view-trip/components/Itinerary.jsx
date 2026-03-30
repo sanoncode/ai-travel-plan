@@ -1,10 +1,9 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import {
-  Calendar,
   Clock,
-  Coffee,
   DollarSign,
   MapPin,
-  Plane,
   Utensils,
   Camera,
   Ticket,
@@ -45,10 +44,7 @@ function TripItinerary({itinerary}){
         }
   })
     const settingDays = Object.assign({}, ...setDay)
-    console.log(settingDays, "setting days")
-    console.log(sorted, "sorted daily itinerary"
-    )
-
+  
    const [openDays, setOpenDays] = useState(settingDays)
 
   const toggleDay = (day) => {

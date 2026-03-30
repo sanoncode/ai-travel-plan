@@ -7,13 +7,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
     model: "gemini-3-flash-preview",
   });
   
-
-  //adjust temperature, max token based on chatgpt
   const generationConfig = {
-    temperature: 0.7,
-    topP: 0.9,
+    temperature: 1,
+    topP: 0.95,
     topK: 40,
-    maxOutputTokens: 2048,
+    maxOutputTokens: 8192,
     responseMimeType: "application/json",
   };
   

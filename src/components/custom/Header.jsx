@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogClose
 } from "@/components/ui/dialog";
 import { FcGoogle } from "react-icons/fc";
 import { googleLogout } from "@react-oauth/google";
