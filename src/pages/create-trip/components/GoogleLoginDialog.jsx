@@ -1,22 +1,32 @@
-import React from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle
+} from "@/components/ui/dialog";
 
-function GoogleLoginDialog({openLoginDialog}) {
+import { Button } from "@/components/ui/button";
+import { FcGoogle } from "react-icons/fc";
+
+// eslint-disable-next-line react/prop-types
+function GoogleLoginDialog({open, setOpen, googleLogin}) {
+
   return (
-    <Dialog open={openLoginDialog}>
+    <Dialog open={open} onOpenChange={setOpen}>
     <DialogContent>
-      <DialogHeader>
+      <DialogTitle>
         <DialogDescription>
-          <img src="/logo.svg" />
+          <img src="/kiakialogo.png" />
           <h2 className="font-extrabold text-lg mt-7">
             Sign in with google
           </h2>
           <p>sign in to the App with Google Authentication securely</p>
-          <Button onClick={() => GoogleLogin()} className="mt-10 w-full">
+          <Button onClick={() => googleLogin()} className="mt-10 w-full">
             <FcGoogle />
             Signin With Google
           </Button>
         </DialogDescription>
-      </DialogHeader>
+      </DialogTitle>
     </DialogContent>
   </Dialog>
   )

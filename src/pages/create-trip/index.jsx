@@ -15,22 +15,16 @@ import "react-country-state-city/dist/react-country-state-city.css";
 
 import { toast } from "sonner";
 import { useGoogleLogin } from "@react-oauth/google";
-import { FcGoogle } from "react-icons/fc";
+
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/service/firebaseConfig";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-} from "@/components/ui/dialog";
-import { useNavigate } from "react-router-dom";
 import { serverTimestamp } from "firebase/firestore";
+import GoogleLoginDialog from "./components/GoogleLoginDialog";
 
 function CreateTrip() {
-  const [place, setplace] = useState();
+  
   const [formData, setformData] = useState([]);
   const [openLoginDialog, setopenLoginDialog] = useState(false);
   const [openGenerateDialog, setopenGenerateDialog] = useState(false);
@@ -38,7 +32,6 @@ function CreateTrip() {
   const [viewTripId, setViewTripId] = useState();
   const [limitDays, setlimitDays] = useState(false);
 
-  const navigate = useNavigate()
 
   const HandleInputchange = (name, value) => {
 
@@ -225,7 +218,8 @@ function CreateTrip() {
         </Button>
       </div>
 
-      <Dialog open={openLoginDialog}>
+  <GoogleLoginDialog open={openLoginDialog} setOpen={setopenLoginDialog} googleLogin={() => GoogleLogin()} />
+      {/* <Dialog open={openLoginDialog} onOpenChange={openLoginDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
@@ -241,7 +235,7 @@ function CreateTrip() {
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
         <AILoadingDialog
           open={openGenerateDialog}
