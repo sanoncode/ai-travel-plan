@@ -32,6 +32,7 @@ function CreateTrip() {
   const [generating, setGenerating] = useState(false);
   const [viewTripId, setViewTripId] = useState();
   const [limitDays, setlimitDays] = useState(false);
+  
 
 
   const HandleInputchange = (name, value) => {
@@ -66,19 +67,31 @@ function CreateTrip() {
       toast("please fill all the fields");
       return;
     }
+  
+   try {
     setGenerating(true);
-    setOpenGenerateDialog(true)
+    setOpenGenerateDialog(true);
 
-    const FINAL_PROMPT = AI_PROMPT.replace(
-      "{country}",
-      formData?.country?.name
-    ).replace("{state}", formData?.state?.name)
+    const FINAL_PROMPT = AI_PROMPT
+      .replace("{country}", formData?.country?.name)
+      .replace("{state}", formData?.state?.name)
       .replace("{days}", formData?.days)
       .replace("{people}", formData?.people)
       .replace("{budget}", formData?.budget);
 
-    const result = await chatSession.sendMessage(FINAL_PROMPT)
+    const result = await chatSession.sendMessage(FINAL_PROMPT);
+
     SaveAiTrip(result?.response?.text());
+
+  } catch (err) {
+    console.error(err);
+
+    // 🔥 tampilkan dialog error
+    setOpenGenerateDialog(false);
+
+  } finally {
+    setGenerating(false);
+  }
   };
 
   const SaveAiTrip = async (TripData) => {
