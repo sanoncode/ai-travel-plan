@@ -42,7 +42,7 @@ export function AILoadingDialog({ open, generating, onCancel, viewTripId }) {
         clearInterval(stepInterval)
         return prev
       })
-    }, 2000)
+    }, 1000)
 
     return () => {
       clearInterval(stepInterval)

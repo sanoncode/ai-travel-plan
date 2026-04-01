@@ -14,8 +14,9 @@ function Hero() {
                 Personalized itineraries at your fingertips. Your personal trip planner and travel curator, creating custom journeys tailored to your interests and budget.
             </p>
             <div className="mt-10 flex space-x-4">
-                <button className="px-8 py-4 bg-[#2D3436] text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition">Get Started, It's free</button>
-                <button className="px-8 py-4 bg-white border border-gray-200 rounded-xl font-bold hover:bg-gray-50 transition">Learn More</button>
+             <Link to={'/create-trip'}>
+                <Button className="px-8 py-4 bg-[#2D3436] text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition">Get Started, It&apos;s free</Button>
+            </Link>
             </div>
         </div>
 

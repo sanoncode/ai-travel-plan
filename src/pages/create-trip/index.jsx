@@ -7,38 +7,32 @@ import {
   SelectTravelerList,
 } from "@/constants/options";
 import { chatSession } from "@/service/AImodel";
-import axios from "axios";
+
 import { useState } from "react";
 
 import { CountrySelect, StateSelect } from "react-country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
 
 import { toast } from "sonner";
-import { useGoogleLogin } from "@react-oauth/google";
-import { FcGoogle } from "react-icons/fc";
+
+
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/service/firebaseConfig";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-} from "@/components/ui/dialog";
-import { useNavigate } from "react-router-dom";
 import { serverTimestamp } from "firebase/firestore";
+import GoogleLoginDialog from "./components/GoogleLoginDialog";
+import { useUserStore } from "@/store/useUserStore";
 
 function CreateTrip() {
-  const [place, setplace] = useState();
+  const user = useUserStore((state)=> state.user)
   const [formData, setformData] = useState([]);
-  const [openLoginDialog, setopenLoginDialog] = useState(false);
-  const [openGenerateDialog, setopenGenerateDialog] = useState(false);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+  const [openGenerateDialog, setOpenGenerateDialog] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [viewTripId, setViewTripId] = useState();
   const [limitDays, setlimitDays] = useState(false);
 
-  const navigate = useNavigate()
 
   const HandleInputchange = (name, value) => {
 
@@ -58,14 +52,13 @@ function CreateTrip() {
 
   const OnGenerateTrip = async () => {
     
-    const user = localStorage.getItem("user");
     if (!user) {
-      setopenLoginDialog(true);
+      setOpenLoginDialog(true);
       return;
     }
   
     // implement validation to check if country, people, budget are selected
-     if (
+     if ( 
       !formData?.country ||
       !formData?.budget ||
       !formData?.people
@@ -74,7 +67,7 @@ function CreateTrip() {
       return;
     }
     setGenerating(true);
-    setopenGenerateDialog(true)
+    setOpenGenerateDialog(true)
 
     const FINAL_PROMPT = AI_PROMPT.replace(
       "{country}",
@@ -105,28 +98,6 @@ function CreateTrip() {
     setGenerating(false);
   };
 
-  const GoogleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => GetUserProfile(tokenResponse),
-    onError: (error) => console.log(error, "login error"),
-  });
-
-  const GetUserProfile = (tokenInfo) => {
-    axios
-      .get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo?.access_token}`,
-        {
-          headers: {
-            Authorization: `Bearer ${tokenInfo?.access_token}`,
-            Accept: "Application/json",
-          },
-        }
-      )
-      .then((response) => {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        setopenLoginDialog(false);
-        OnGenerateTrip();
-      });
-  };
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl-px-10 px-5 mt-10">
       <h2 className="font-bold text-3xl">
@@ -225,27 +196,14 @@ function CreateTrip() {
         </Button>
       </div>
 
-      <Dialog open={openLoginDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogDescription>
-              <img src="/logo.svg" />
-              <h2 className="font-extrabold text-lg mt-7">
-                Sign in with google
-              </h2>
-              <p>sign in to the App with Google Authentication securely</p>
-              <Button onClick={() => GoogleLogin()} className="mt-10 w-full">
-                <FcGoogle />
-                Signin With Google
-              </Button>
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-
+        <GoogleLoginDialog 
+        open={openLoginDialog} 
+        setOpen={setOpenLoginDialog} 
+        />
+     
         <AILoadingDialog
           open={openGenerateDialog}
-          onOpenChange={setopenGenerateDialog}
+          onOpenChange={setOpenGenerateDialog}
           generating={generating}
           onCancel={() => setGenerating(false)}
           viewTripId={viewTripId}
