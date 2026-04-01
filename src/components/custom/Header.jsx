@@ -16,8 +16,6 @@ import Images from "./Images";
 function Header() {
   const user = useUserStore((state)=> state.user)
 
-  console.log(user,'user')
-  
   const logout = useUserStore((state) => state.removeUser)
   
   const [openDialog, setOpenDialog] = useState(false);

@@ -35,8 +35,6 @@ function GoogleLoginDialog({open, setOpen}) {
         }
       )
       .then((response) => {
-
-        console.log(response.data, 'response')
         setUser(response.data)
         setOpen(false);
       });
