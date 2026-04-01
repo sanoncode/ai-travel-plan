@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { useNavigation } from "react-router-dom";
 import UserTripCarditem from "./components/UserTripCarditem";
 import { SkeletonCard } from './components/SkeletonCard'
+import { useUserStore } from "@/store/useUserStore";
 
 function MyTrip() {
   const navigate = useNavigation();
+  const user = useUserStore((state)=>state.user)
 
   const [userTrips, setUserTrips] = useState([]);
 
@@ -15,7 +17,7 @@ function MyTrip() {
   }, []);
 
   const GetUserTrips = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    
     if (!user) {
       navigate("/");
       return;

@@ -38,7 +38,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <Header />
       <Toaster />
-      <RouterProvider router={router} />
+      <RouterProvider router={router}>
+      </RouterProvider>
     </GoogleOAuthProvider>
   </React.StrictMode>
   
