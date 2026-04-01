@@ -29,7 +29,7 @@ function CreateTrip() {
   const [formData, setformData] = useState([]);
   const [openLoginDialog, setOpenLoginDialog] = useState(false);
   const [openGenerateDialog, setOpenGenerateDialog] = useState(false);
-  const [generating, setGenerating] = useState(false);
+  const [generatingStatus, setGeneratingStatus] = useState("");
   const [viewTripId, setViewTripId] = useState();
   const [limitDays, setlimitDays] = useState(false);
   
@@ -69,7 +69,7 @@ function CreateTrip() {
     }
   
    try {
-    setGenerating(true);
+    setGeneratingStatus("loading");
     setOpenGenerateDialog(true);
 
     const FINAL_PROMPT = AI_PROMPT
@@ -85,14 +85,10 @@ function CreateTrip() {
 
   } catch (err) {
     console.error(err);
+    setGeneratingStatus("error")
 
-    // 🔥 tampilkan dialog error
-    setOpenGenerateDialog(false);
-
-  } finally {
-    setGenerating(false);
-  }
-  };
+  } 
+};
 
   const SaveAiTrip = async (TripData) => {
   
@@ -108,7 +104,7 @@ function CreateTrip() {
     });
    
     setViewTripId(docId)
-    setGenerating(false);
+    setGeneratingStatus("success");
   };
 
   return (
@@ -200,8 +196,8 @@ function CreateTrip() {
         </div>
       </div>
       <div className="my-10 flex justify-end">
-        <Button onClick={OnGenerateTrip} disabled={(limitDays || generating)}>
-          {generating ? (
+        <Button onClick={OnGenerateTrip} disabled={(limitDays || (generatingStatus === 'loading'))}>
+          {generatingStatus === 'loading' ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
           ) : (
             "Generate Trip"
@@ -217,8 +213,8 @@ function CreateTrip() {
         <AILoadingDialog
           open={openGenerateDialog}
           onOpenChange={setOpenGenerateDialog}
-          generating={generating}
-          onCancel={() => setGenerating(false)}
+          status={generatingStatus}
+          onCancel={() => setGeneratingStatus("")}
           viewTripId={viewTripId}
         />
     </div>
