@@ -2,7 +2,8 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogTitle
+  DialogTitle,
+  DialogHeader
 } from "@/components/ui/dialog";
 
 import { useUserStore } from "@/store/useUserStore";
@@ -42,21 +43,18 @@ function GoogleLoginDialog({open, setOpen}) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-    <DialogContent>
-      <DialogTitle>
-        <DialogDescription>
-          <img src="/kiakialogo.png" />
-          <h2 className="font-extrabold text-lg mt-7">
-            Sign in with google
-          </h2>
-          <p>sign in to the App with Google Authentication securely</p>
-          <Button onClick={() => GoogleLogin()} className="mt-10 w-full">
-            <FcGoogle />
-            Signin With Google
-          </Button>
-        </DialogDescription>
-      </DialogTitle>
-    </DialogContent>
+      <DialogContent>
+        <DialogHeader>
+            <img className="mx-auto h-24" src="/kiakialogo.png" />
+              <DialogTitle className="font-extrabold text-lg text-center mt-7 mb-20">
+              Sign in
+              </DialogTitle>
+            <Button onClick={() => GoogleLogin()} className=" mt-10 w-full">
+              <FcGoogle />
+              Continue With Google
+            </Button>
+        </DialogHeader>
+      </DialogContent>
   </Dialog>
   )
 }
