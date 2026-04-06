@@ -2,7 +2,7 @@
 
 > A lightweight AI-powered travel planning app that helps users instantly generate personalized trip itineraries based on their preferences and destinations
 
-[Add a Screenshot, GIF, or Link to Live Demo here]
+![screenshot](public/screenzy-kiakia.png)
 
 ---
 
@@ -35,50 +35,3 @@ This project demonstrates my proficiency in:
 *   **Persistent Form State with Zustand:**  User inputs are preserved across navigation and even during authentication flows, ensuring no data is lost and delivering a seamless user experience.
 *   **Seamless Auth Flow & Routing:** Users can start creating a trip before logging in, and after authentication, are redirected back with their progress fully intact.
 
-## ⚙️ Getting Started
-Instructions to run this project locally:
-
-1.  Clone the repo:
-    ```bash
-    git clone https://github.com/[your-username]/[project-name].git
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-3.  Set up environment variables (`.env`).
-4.  Run the app:
-    ```bash
-    npm start
-    ```
-
-## 🧠 Personal Branding & Takeaways
-*   **Technical Skill Growth:** Improved skills in [e.g., API authentication, database modeling].
-*   **Why This Matters:** This project shows I can build [full-stack / front-end / backend] solutions from scratch.
-*   **Next Steps:** Planning to add [feature] or deploy to [service].
-
-## 🤝 Contact
-*   **Name:** [Your Name]
-*   **LinkedIn:** [Link]
-*   **Portfolio:** [Link]
-*   **GitHub:** [Link]
-
----
-[Optional: License Information]
-
-
-
-
-
-
-
-
-
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
