@@ -26,8 +26,7 @@ export function AILoadingDialog({
   open,
   status = "loading", // "loading" | "success" | "error"
   errorMessage,
-  onCancel,
-  onCloseError,
+  onOpenChange,
   viewTripId,
 }) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -57,11 +56,11 @@ export function AILoadingDialog({
   }, [isLoading]);
 
   return (
-    <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={open}>
+      <DialogContent className="sm:max-w-md [&>button]:hidden">
         <div className="flex flex-col items-center space-y-6 py-4">
 
-          {/* 🔥 ICON / IMAGE */}
+          {/* ICON / IMAGE */}
           <div className="flex items-center justify-center w-full rounded-full">
             {isLoading && (
               <img src="/placeholder.jpg" className="h-[300px] w-full p-2" />
@@ -76,7 +75,7 @@ export function AILoadingDialog({
             )}
           </div>
 
-          {/* 🔥 TITLE */}
+          {/* TITLE */}
           <div className="text-center space-y-2">
             <DialogTitle className="text-lg font-medium">
               {isLoading && "Creating a travel plan for you"}
@@ -128,12 +127,12 @@ export function AILoadingDialog({
             </div>
           )}
 
-          {/* 🔥 ACTION BUTTON */}
-          {isLoading && (
+          {/* ACTION BUTTON */}
+          {/* {isLoading && (
             <Button variant="outline" onClick={onCancel}>
               Cancel Generation
             </Button>
-          )}
+          )} */}
 
           {isSuccess && (
             <Link to={"/view-trip/" + viewTripId}>
@@ -143,11 +142,8 @@ export function AILoadingDialog({
 
           {isError && (
             <div className="flex gap-2">
-              <Button variant="outline" onClick={onCloseError}>
+              <Button variant="outline" onClick={onOpenChange}>
                 Close
-              </Button>
-              <Button onClick={onCancel}>
-                Try Again
               </Button>
             </div>
           )}
