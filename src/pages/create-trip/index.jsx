@@ -29,7 +29,7 @@ function CreateTrip() {
   const [formData, setformData] = useState([]);
   const [openLoginDialog, setOpenLoginDialog] = useState(false);
   const [openGenerateDialog, setOpenGenerateDialog] = useState(false);
-  const [generatingStatus, setGeneratingStatus] = useState("");
+  const [generatingStatus, setGeneratingStatus] = useState(""); 
   const [viewTripId, setViewTripId] = useState();
   const [limitDays, setlimitDays] = useState(false);
   
