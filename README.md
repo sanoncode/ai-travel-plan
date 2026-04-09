@@ -1,4 +1,4 @@
-# [KiaKia] 🚀
+# KiaKia 🚀
 
 > A lightweight AI-powered travel planning app that helps users instantly generate personalized trip itineraries based on their preferences and destinations
 
