@@ -46,7 +46,7 @@ function CreateTrip() {
     useShallow((state) => ({
       formData: state.formData,
       openGenerateDialog: state.openGenerateDialog,
-      generatingStatus: state.GeneratingStatus,
+      generatingStatus: state.generatingStatus,
       viewTripId: state.viewTripId,
       limitDays: state.limitDays,
       setFormData: state.setFormData,
@@ -68,8 +68,6 @@ function CreateTrip() {
     }
     setFormData(name, value);
   };
-
-
 
   const OnGenerateTrip = async () => {
     if (!user) {
@@ -97,9 +95,8 @@ function CreateTrip() {
         .replace("{budget}", formData?.budget);
 
       const result = await chatSession.sendMessage(FINAL_PROMPT);
-      console.log(result,'res')
 
-      SaveAiTrip(result?.response?.text());
+      await SaveAiTrip(result?.response?.text());
     } catch (err) {
       console.error(err);
       setGeneratingStatus("error");
@@ -107,8 +104,14 @@ function CreateTrip() {
   };
 
   const SaveAiTrip = async (TripData) => {
+    let Tripdata;
+    try {
+      Tripdata = JSON.parse(TripData);
+    } catch (err) {
+      console.error("JSON ERROR: ", err);
+      return;
+    }
     const docId = Date.now().toString();
-    const Tripdata = JSON.parse(TripData);
     await setDoc(doc(db, "trip", docId), {
       id: docId,
       userSelection: formData,
