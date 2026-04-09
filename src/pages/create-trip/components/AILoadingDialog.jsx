@@ -35,7 +35,7 @@ export function AILoadingDialog({
   const isSuccess = status === "success";
   const isError = status === "error";
 
-  console.log(status, 'status')
+  console.log(status,'status')
 
   useEffect(() => {
     if (!isLoading) return;
