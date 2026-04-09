@@ -11,7 +11,8 @@ import {
   ChevronDown,
   ChevronRight,
   Train,
-  Car
+  Car,
+  ShoppingBag
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -69,15 +70,16 @@ function TripItinerary({itinerary}){
     )
   }
 
-  const iconMap = {
-  food: <Utensils className="h-5 w-5 text-fuchsia-500 mt-0.5" />,
-  attraction: <Camera className="h-5 w-5 text-red-500 mt-0.5" />,
-  hotel: <Hotel className="h-5 w-5 text-blue-500 mt-0.5" />,
-  train: <Train className="h-5 w-5 text-green-500 mt-0.5" />,
-  transport: <Car className="h-5 w-5 text-purple-500 mt-0.5" />,
-  event: <Ticket className="h-5 w-5 text-orange-500 mt-0.5" />,
-  default: <MapPin className="h-5 w-5 text-amber-500 mt-0.5" />
-};
+      const iconMap = {
+      food: <Utensils className="h-5 w-5 text-fuchsia-500 mt-0.5" />,
+      attraction: <Camera className="h-5 w-5 text-red-500 mt-0.5" />,
+      hotel: <Hotel className="h-5 w-5 text-blue-500 mt-0.5" />,
+      train: <Train className="h-5 w-5 text-green-500 mt-0.5" />,
+      transport: <Car className="h-5 w-5 text-purple-500 mt-0.5" />,
+      event: <Ticket className="h-5 w-5 text-orange-500 mt-0.5" />,
+      default: <MapPin className="h-5 w-5 text-amber-500 mt-0.5" />,
+      shopping: <ShoppingBag className="h-5 w-5 text-sky-500 mt-0.5" />
+    };
 
 
       return sorted.map(([day, activities], index) => (

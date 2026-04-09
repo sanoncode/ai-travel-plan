@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Loader2, CheckCircle2, XCircle} from "lucide-react"
 import { Link } from "react-router-dom"
+import { useCreateTripStore } from "@/store/useCreateTripStore";
 
 
 const generationSteps = [
@@ -31,10 +32,13 @@ export function AILoadingDialog({
 }) {
   const [currentStep, setCurrentStep] = useState(0);
 
+  const  reset = useCreateTripStore((state) => ( state.reset ));
+
   const isLoading = status === "loading";
   const isSuccess = status === "success";
   const isError = status === "error";
 
+  console.log(status,'status in dialog')
 
   useEffect(() => {
     if (!isLoading) return;
@@ -141,7 +145,10 @@ export function AILoadingDialog({
 
           {isError && (
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setOpen(false)}>
+              <Button variant="outline" onClick={() => {
+                setOpen(false)
+                reset()
+              }}>
                 Close
               </Button>
             </div>

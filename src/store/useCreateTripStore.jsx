@@ -13,7 +13,5 @@ export const useCreateTripStore = create((set)=>({
     setFormData:(name, value) => set((state)=>({
        formData: {...state.formData, [name]: value}
     })),
-    reset: () => ({
-        generatingStatus: "",
-    })
+    reset: () => set({generatingStatus: ""})
 }))

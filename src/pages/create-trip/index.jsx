@@ -24,17 +24,6 @@ import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/react/shallow";
 
 function CreateTrip() {
-<<<<<<< HEAD
-  const user = useUserStore((state)=> state.user)
-  const [formData, setformData] = useState([]);
-  const [openLoginDialog, setOpenLoginDialog] = useState(false);
-  const [openGenerateDialog, setOpenGenerateDialog] = useState(false);
-  const [generatingStatus, setGeneratingStatus] = useState(""); 
-  const [viewTripId, setViewTripId] = useState();
-  const [limitDays, setlimitDays] = useState(false);
-  
-
-=======
   const { user, openLoginDialog, setOpenLoginDialog } = useUserStore(
     useShallow((state) => ({
       user: state.user,
@@ -67,7 +56,6 @@ function CreateTrip() {
       setLimitDays: state.setLimitDays,
     })),
   );
->>>>>>> 0f48d401ad019e8904bf4f33c36e3e1cd4cab2ea
 
   const HandleInputchange = (name, value) => {
     // implement validation for days, maximum 7 days
@@ -194,9 +182,8 @@ function CreateTrip() {
           {SelectBudgetOptions.map((item, index) => (
             <div
               key={index}
-              className={`p-4 border rounded-lg hover:shadow-lg ${
-                formData.budget === item.desc && "shadow-lg border-black"
-              }`}
+              className={`p-4 border rounded-lg hover:shadow-lg ${formData.budget === item.desc && "shadow-lg border-black"
+                }`}
               onClick={() => HandleInputchange("budget", item.desc)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
@@ -215,9 +202,8 @@ function CreateTrip() {
           {SelectTravelerList.map((item, index) => (
             <div
               key={index}
-              className={`p-4 border rounded-lg hover:shadow-lg ${
-                formData.people === item.people && "shadow-lg border-black"
-              }`}
+              className={`p-4 border rounded-lg hover:shadow-lg ${formData.people === item.people && "shadow-lg border-black"
+                }`}
               onClick={() => HandleInputchange("people", item.people)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
