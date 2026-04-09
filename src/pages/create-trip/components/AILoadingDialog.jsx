@@ -26,7 +26,7 @@ export function AILoadingDialog({
   open,
   status = "loading", // "loading" | "success" | "error"
   errorMessage,
-  onOpenChange,
+  setOpen,
   viewTripId,
 }) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -56,7 +56,7 @@ export function AILoadingDialog({
   }, [isLoading]);
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md [&>button]:hidden">
         <div className="flex flex-col items-center space-y-6 py-4">
 
@@ -142,7 +142,7 @@ export function AILoadingDialog({
 
           {isError && (
             <div className="flex gap-2">
-              <Button variant="outline" onClick={onOpenChange}>
+              <Button variant="outline" onClick={() => setOpen(false)}>
                 Close
               </Button>
             </div>

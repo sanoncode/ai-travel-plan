@@ -212,7 +212,7 @@ function CreateTrip() {
      
         <AILoadingDialog
           open={openGenerateDialog}
-          onOpenChange={setOpenGenerateDialog}
+          setOpen={setOpenGenerateDialog}
           status={generatingStatus}
           onCancel={() => setGeneratingStatus("")}
           viewTripId={viewTripId}
