@@ -55,7 +55,7 @@ export function AILoadingDialog({
   }, [isLoading]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open}>
       <DialogContent className="sm:max-w-md [&>button]:hidden">
         <div className="flex flex-col items-center space-y-6 py-4">
 

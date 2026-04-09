@@ -109,6 +109,7 @@ function CreateTrip() {
       Tripdata = JSON.parse(TripData);
     } catch (err) {
       console.error("JSON ERROR: ", err);
+      setGeneratingStatus("error");
       return;
     }
     const docId = Date.now().toString();

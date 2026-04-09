@@ -12,5 +12,8 @@ export const useCreateTripStore = create((set)=>({
     setLimitDays: (limit) => set({limitDays: limit}),
     setFormData:(name, value) => set((state)=>({
        formData: {...state.formData, [name]: value}
-    }))
+    })),
+    reset: () => ({
+        generatingStatus: "",
+    })
 }))
