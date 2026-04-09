@@ -26,7 +26,7 @@ export function AILoadingDialog({
   open,
   status = "loading", // "loading" | "success" | "error"
   errorMessage,
-  onOpenChange,
+  setOpen,
   viewTripId,
 }) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -35,7 +35,6 @@ export function AILoadingDialog({
   const isSuccess = status === "success";
   const isError = status === "error";
 
-  console.log(status, 'status')
 
   useEffect(() => {
     if (!isLoading) return;
@@ -86,7 +85,7 @@ export function AILoadingDialog({
             <DialogDescription className="text-sm text-muted-foreground">
               {isLoading && "Please wait while our AI creates your travel plan"}
               {isSuccess && "Your travel plan is ready to view"}
-              {isError && (errorMessage || "Server is busy, please try again later")}
+              {isError && (errorMessage || "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.")}
             </DialogDescription>
           </div>
 
@@ -142,7 +141,7 @@ export function AILoadingDialog({
 
           {isError && (
             <div className="flex gap-2">
-              <Button variant="outline" onClick={onOpenChange}>
+              <Button variant="outline" onClick={() => setOpen(false)}>
                 Close
               </Button>
             </div>
