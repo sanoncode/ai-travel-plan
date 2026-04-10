@@ -39,8 +39,6 @@ export function AILoadingDialog({
   const isError = status === "error";
   const isOffline = status === "offline";
 
-  console.log(status,'status in dialog')
-
   useEffect(() => {
     if (!isLoading) return;
 
