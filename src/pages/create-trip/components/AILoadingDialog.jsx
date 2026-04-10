@@ -25,9 +25,9 @@ const generationSteps = [
 
 export function AILoadingDialog({
   open,
-  status = "loading", // "loading" | "success" | "error"
+  status = "loading", // "loading" | "success" | "error" | "offline"
   errorMessage,
-  setOpen,
+  onRetry,
   viewTripId,
 }) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -37,6 +37,7 @@ export function AILoadingDialog({
   const isLoading = status === "loading";
   const isSuccess = status === "success";
   const isError = status === "error";
+  const isOffline = status === "offline";
 
   console.log(status,'status in dialog')
 
@@ -76,6 +77,10 @@ export function AILoadingDialog({
             {isError && (
               <XCircle className="h-10 w-10 text-red-500" />
             )}
+            {isOffline && (
+               <XCircle className="h-10 w-10 text-red-500" />
+            )
+            }
           </div>
 
           {/* TITLE */}
@@ -84,12 +89,14 @@ export function AILoadingDialog({
               {isLoading && "Creating a travel plan for you"}
               {isSuccess && "Completed!"}
               {isError && "Something went wrong"}
+              {isOffline && "No Internet Connection"}
             </DialogTitle>
 
             <DialogDescription className="text-sm text-muted-foreground">
               {isLoading && "Please wait while our AI creates your travel plan"}
               {isSuccess && "Your travel plan is ready to view"}
               {isError && (errorMessage || "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.")}
+              {isOffline && "Your Connection seems unstable, please check your internet and try again"}
             </DialogDescription>
           </div>
 
@@ -145,11 +152,25 @@ export function AILoadingDialog({
 
           {isError && (
             <div className="flex gap-2">
+               <Button variant="outline" onClick={() => {
+                reset()
+                onRetry()
+              }}>
+                Try Again
+              </Button>
               <Button variant="outline" onClick={() => {
-                setOpen(false)
                 reset()
               }}>
                 Close
+              </Button>
+            </div>
+          )}
+          {isOffline && (
+            <div className="flex gap-2">
+               <Button variant="outline" onClick={() => {
+                onRetry()
+              }}>
+                Try Again
               </Button>
             </div>
           )}

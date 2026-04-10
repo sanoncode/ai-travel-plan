@@ -113,13 +113,23 @@ function CreateTrip() {
       return;
     }
     const docId = Date.now().toString();
-    await setDoc(doc(db, "trip", docId), {
-      id: docId,
-      userSelection: formData,
-      tripData: Tripdata,
-      userEmail: user?.email,
-      createdAt: serverTimestamp(),
-    });
+
+    try {
+      await setDoc(doc(db, "trip", docId), {
+        id: docId,
+        userSelection: formData,
+        tripData: Tripdata,
+        userEmail: user?.email,
+        createdAt: serverTimestamp(),
+      });
+    } catch (err) {
+      console.error("FIRESTORE ERROR: ", err);
+      if (!navigator.onLine) {
+        setGeneratingStatus("offline");
+      } else {
+        setGeneratingStatus("error");
+      }
+    }
 
     setViewTripId(docId);
     setGeneratingStatus("success");
@@ -182,8 +192,9 @@ function CreateTrip() {
           {SelectBudgetOptions.map((item, index) => (
             <div
               key={index}
-              className={`p-4 border rounded-lg hover:shadow-lg ${formData.budget === item.desc && "shadow-lg border-black"
-                }`}
+              className={`p-4 border rounded-lg hover:shadow-lg ${
+                formData.budget === item.desc && "shadow-lg border-black"
+              }`}
               onClick={() => HandleInputchange("budget", item.desc)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
@@ -202,8 +213,9 @@ function CreateTrip() {
           {SelectTravelerList.map((item, index) => (
             <div
               key={index}
-              className={`p-4 border rounded-lg hover:shadow-lg ${formData.people === item.people && "shadow-lg border-black"
-                }`}
+              className={`p-4 border rounded-lg hover:shadow-lg ${
+                formData.people === item.people && "shadow-lg border-black"
+              }`}
               onClick={() => HandleInputchange("people", item.people)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
@@ -232,7 +244,7 @@ function CreateTrip() {
         open={openGenerateDialog}
         setOpen={setOpenGenerateDialog}
         status={generatingStatus}
-        onCancel={() => setGeneratingStatus("")}
+        onRetry={OnGenerateTrip}
         viewTripId={viewTripId}
       />
     </div>

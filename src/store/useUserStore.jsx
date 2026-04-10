@@ -1,8 +1,12 @@
 import { create } from "zustand";
 
 export const useUserStore = create((set)=>({
+
+    //data
     user: JSON.parse(localStorage.getItem('user') || null),
     openLoginDialog: false,
+
+    //action
     setUser: (userData) => {
         localStorage.setItem('user',JSON.stringify(userData))
         set({user: userData})
