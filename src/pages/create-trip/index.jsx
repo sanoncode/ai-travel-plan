@@ -2,22 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AILoadingDialog } from "./components/AILoadingDialog";
 import {
-  AI_PROMPT,
   SelectBudgetOptions,
   SelectTravelerList,
 } from "@/constants/options";
-import { chatSession } from "@/service/AImodel";
+
 
 import { CountrySelect, StateSelect } from "react-country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
 
 import { toast } from "sonner";
-
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "@/service/firebaseConfig";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import { serverTimestamp } from "firebase/firestore";
+
 import GoogleLoginDialog from "./components/GoogleLoginDialog";
 import { useUserStore } from "@/store/useUserStore";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
@@ -33,15 +29,14 @@ function CreateTrip() {
   );
   const {
     formData,
-    setFormData,
     openGenerateDialog,
     setOpenGenerateDialog,
     generatingStatus,
-    setGeneratingStatus,
     viewTripId,
-    setViewTripId,
+    generateTrip,
+    handleInputchange,
     limitDays,
-    setLimitDays,
+    
   } = useCreateTripStore(
     useShallow((state) => ({
       formData: state.formData,
@@ -49,91 +44,60 @@ function CreateTrip() {
       generatingStatus: state.generatingStatus,
       viewTripId: state.viewTripId,
       limitDays: state.limitDays,
-      setFormData: state.setFormData,
       setOpenGenerateDialog: state.setOpenGenerateDialog,
-      setGeneratingStatus: state.setGeneratingStatus,
-      setViewTripId: state.setViewTripId,
-      setLimitDays: state.setLimitDays,
+      generateTrip: state.generateTrip,
+      handleInputchange: state.handleInputchange
     })),
   );
 
-  const HandleInputchange = (name, value) => {
-    // implement validation for days, maximum 7 days
-    if (name === "days" && (value > 7 || value < 1)) {
-      toast("Please enter a value between 1 and 7 for days");
-      setLimitDays(true);
-      return;
-    } else {
-      setLimitDays(false);
-    }
-    setFormData(name, value);
-  };
+ 
 
-  const OnGenerateTrip = async () => {
-    if (!user) {
-      setOpenLoginDialog(true);
-      return;
-    }
+ const OnGenerateTrip = async () => {
+  if (!user) {
+    setOpenLoginDialog(true);
+    return;
+  }
 
-    // implement validation to check if country, people, budget are selected
-    if (!formData?.country || !formData?.budget || !formData?.people) {
+  try {
+    await generateTrip(user);
+  } catch (err) {
+    if (err.message === "VALIDATION_ERROR") {
       toast("please fill all the fields");
-      return;
     }
+  }
+};
 
-    try {
-      setGeneratingStatus("loading");
-      setOpenGenerateDialog(true);
+ 
+  //   let Tripdata;
+  //   try {
+  //     Tripdata = JSON.parse(TripData);
+  //   } catch (err) {
+  //     console.error("JSON ERROR: ", err);
+  //     setGeneratingStatus("error");
+  //     return;
+  //   }
+  //   const docId = Date.now().toString();
 
-      const FINAL_PROMPT = AI_PROMPT.replace(
-        "{country}",
-        formData?.country?.name,
-      )
-        .replace("{states}", formData?.states?.name)
-        .replace("{days}", formData?.days)
-        .replace("{people}", formData?.people)
-        .replace("{budget}", formData?.budget);
+  //   try {
+  //     await setDoc(doc(db, "trip", docId), {
+  //       id: docId,
+  //       userSelection: formData,
+  //       tripData: Tripdata,
+  //       userEmail: user?.email,
+  //       createdAt: serverTimestamp(),
+  //     });
+  //   } catch (err) {
+  //     console.error("FIRESTORE ERROR: ", err);
+  //     if (!navigator.onLine) {
+  //       setGeneratingStatus("offline");
+  //     } else {
+  //       setGeneratingStatus("error");
+  //     }
+  //   }
 
-      const result = await chatSession.sendMessage(FINAL_PROMPT);
-
-      await SaveAiTrip(result?.response?.text());
-    } catch (err) {
-      console.error(err);
-      setGeneratingStatus("error");
-    }
-  };
-
-  const SaveAiTrip = async (TripData) => {
-    let Tripdata;
-    try {
-      Tripdata = JSON.parse(TripData);
-    } catch (err) {
-      console.error("JSON ERROR: ", err);
-      setGeneratingStatus("error");
-      return;
-    }
-    const docId = Date.now().toString();
-
-    try {
-      await setDoc(doc(db, "trip", docId), {
-        id: docId,
-        userSelection: formData,
-        tripData: Tripdata,
-        userEmail: user?.email,
-        createdAt: serverTimestamp(),
-      });
-    } catch (err) {
-      console.error("FIRESTORE ERROR: ", err);
-      if (!navigator.onLine) {
-        setGeneratingStatus("offline");
-      } else {
-        setGeneratingStatus("error");
-      }
-    }
-
-    setViewTripId(docId);
-    setGeneratingStatus("success");
-  };
+  //   setViewTripId(docId);
+  //   setGeneratingStatus("success");
+  // };
 
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl-px-10 px-5 mt-10">
@@ -152,14 +116,14 @@ function CreateTrip() {
           </h2>
           <div className="flex gap-5">
             <CountrySelect
-              onChange={(country) => HandleInputchange("country", country)}
+              onChange={(country) => handleInputchange("country", country)}
               defaultValue={formData.country}
               placeHolder="Select Country"
             />
 
             <StateSelect
               countryid={formData.country?.id}
-              onChange={(states) => HandleInputchange("states", states)}
+              onChange={(states) => handleInputchange("states", states)}
               defaultValue={formData.states}
               placeHolder="Select States"
             />
@@ -179,8 +143,9 @@ function CreateTrip() {
             }
             min={1}
             max={7}
-            onChange={(e) => HandleInputchange("days", e.target.value)}
+            onChange={(e) => handleInputchange("days", e.target.value)}
           />
+          
         </div>
       </div>
       <div className="mt-10">
@@ -195,7 +160,7 @@ function CreateTrip() {
               className={`p-4 border rounded-lg hover:shadow-lg ${
                 formData.budget === item.desc && "shadow-lg border-black"
               }`}
-              onClick={() => HandleInputchange("budget", item.desc)}
+              onClick={() => handleInputchange("budget", item.desc)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
               <h2 className="font-bold text-lg">{item.title}</h2>
@@ -216,7 +181,7 @@ function CreateTrip() {
               className={`p-4 border rounded-lg hover:shadow-lg ${
                 formData.people === item.people && "shadow-lg border-black"
               }`}
-              onClick={() => HandleInputchange("people", item.people)}
+              onClick={() => handleInputchange("people", item.people)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
               <h2 className="font-bold text-lg">{item.title}</h2>
