@@ -15,6 +15,12 @@ export const useTripStore = create((set, get) => ({
     set({ loading: true, userTrips: [] });
 
     try {
+
+      //  const cached = get().userTrips
+      
+      // if (cached) {
+      //   set({ userTrips: cached, loading: false });
+      // }
       const q = query(collection(db, "trip"), where("userEmail", "==", email));
       //multiple doc use getDocs
       const querySnapshot = await getDocs(q);

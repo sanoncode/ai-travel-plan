@@ -67,37 +67,6 @@ function CreateTrip() {
   }
 };
 
- 
-  //   let Tripdata;
-  //   try {
-  //     Tripdata = JSON.parse(TripData);
-  //   } catch (err) {
-  //     console.error("JSON ERROR: ", err);
-  //     setGeneratingStatus("error");
-  //     return;
-  //   }
-  //   const docId = Date.now().toString();
-
-  //   try {
-  //     await setDoc(doc(db, "trip", docId), {
-  //       id: docId,
-  //       userSelection: formData,
-  //       tripData: Tripdata,
-  //       userEmail: user?.email,
-  //       createdAt: serverTimestamp(),
-  //     });
-  //   } catch (err) {
-  //     console.error("FIRESTORE ERROR: ", err);
-  //     if (!navigator.onLine) {
-  //       setGeneratingStatus("offline");
-  //     } else {
-  //       setGeneratingStatus("error");
-  //     }
-  //   }
-
-  //   setViewTripId(docId);
-  //   setGeneratingStatus("success");
-  // };
 
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl-px-10 px-5 mt-10">
