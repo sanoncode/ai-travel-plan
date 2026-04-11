@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useUserStore } from "@/store/useUserStore";
 import { Button } from "../ui/button";
 import {
@@ -12,69 +11,85 @@ import GoogleLoginDialog from "@/pages/create-trip/components/GoogleLoginDialog"
 import { googleLogout } from "@react-oauth/google";
 
 import Images from "./Images";
+import { useShallow } from "zustand/react/shallow";
 
 function Header() {
-  const user = useUserStore((state)=> state.user)
+  const { user, removeUser, openLoginDialog, setOpenLoginDialog } = useUserStore(
+    useShallow((state) => ({
+      user: state.user,
+      openLoginDialog: state.openLoginDialog,
+      removeUser: state.removeUser,
+      setOpenLoginDialog: state.setOpenLoginDialog,
+    })),
+  );
 
-  const logout = useUserStore((state) => state.removeUser)
-  
-  const [openDialog, setOpenDialog] = useState(false);
   return (
     <>
-     <nav className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-100">
+      <nav className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-100">
         <div className="flex items-center">
-            <a href="/">
-                <Images className="h-16 w-auto object-contain" width="auto" src="/kiakialogo.png" alt="Kiakia Logo" />
+          <a href="/">
+            <Images
+              className="h-16 w-auto object-contain"
+              width="auto"
+              src="/kiakialogo.png"
+              alt="Kiakia Logo"
+            />
+          </a>
+        </div>
+
+        {user ? (
+          <div className="flex items-center gap-3">
+            <a href={"/create-trip"}>
+              <Button className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition">
+                + Create Trip
+              </Button>
             </a>
-        </div>
-
-         {user ? (
-        <div className="flex items-center gap-3">
-           <a href={'/create-trip'}>
-            <Button className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition">+ Create Trip</Button>
-          </a>
-          <a href={'/my-trip'}>
-            <Button className="px-6 py-2 bg-[#2D3436] text-white rounded-full font-semibold hover:bg-black transition">My Trip</Button>
-          </a>
-          <Popover>
-            <PopoverTrigger>
-              <Images
-               src={user?.picture}
-               className="h-[35px] w-[35px] rounded-full"/>
-            </PopoverTrigger>
-            <PopoverContent>
-              <h2
-              className="cursor-pointer"
-                onClick={() => {
-                  //google logout
-                  googleLogout();
-                  //zustand remove localstorage
-                  logout()
-                  window.location.replace("/");
-                }}
-              >
-                Logout
-              </h2>
-            </PopoverContent>
-          </Popover>
-        </div>
-      ) : ( 
-        <div className="flex items-end gap-2">
-         <a href={'/create-trip'}>
-            <Button className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition">+ Create Trip</Button>
-          </a>
-        <Button className="px-6 py-2 bg-black text-white rounded-full font-semibold hover:bg-slate-500 transition" onClick={()=> setOpenDialog(true)}>Sign in</Button>
-        </div>
-
-      )}
-        <GoogleLoginDialog 
-        open={openDialog} 
-        setOpen={setOpenDialog} 
-        />
-    </nav>
+            <a href={"/my-trip"}>
+              <Button className="px-6 py-2 bg-[#2D3436] text-white rounded-full font-semibold hover:bg-black transition">
+                My Trip
+              </Button>
+            </a>
+            <Popover>
+              <PopoverTrigger>
+                <Images
+                  src={user?.picture}
+                  className="h-[35px] w-[35px] rounded-full"
+                />
+              </PopoverTrigger>
+              <PopoverContent>
+                <h2
+                  className="cursor-pointer"
+                  onClick={() => {
+                    //google logout
+                    googleLogout();
+                    //zustand remove localstorage
+                    removeUser();
+                    window.location.replace("/");
+                  }}
+                >
+                  Logout
+                </h2>
+              </PopoverContent>
+            </Popover>
+          </div>
+        ) : (
+          <div className="flex items-end gap-2">
+            <a href={"/create-trip"}>
+              <Button className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition">
+                + Create Trip
+              </Button>
+            </a>
+            <Button
+              className="px-6 py-2 bg-black text-white rounded-full font-semibold hover:bg-slate-500 transition"
+              onClick={() => setOpenLoginDialog(true)}
+            >
+              Sign in
+            </Button>
+          </div>
+        )}
+        <GoogleLoginDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
+      </nav>
     </>
-   
-  
   );
 }
 

@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Loader2, CheckCircle2, XCircle} from "lucide-react"
 import { Link } from "react-router-dom"
+import { useCreateTripStore } from "@/store/useCreateTripStore";
 
 
 const generationSteps = [
@@ -24,18 +25,19 @@ const generationSteps = [
 
 export function AILoadingDialog({
   open,
-  status = "loading", // "loading" | "success" | "error"
+  status = "loading", // "loading" | "success" | "error" | "offline"
   errorMessage,
-  setOpen,
+  onRetry,
   viewTripId,
 }) {
   const [currentStep, setCurrentStep] = useState(0);
 
+  const  reset = useCreateTripStore((state) => ( state.reset ));
+
   const isLoading = status === "loading";
   const isSuccess = status === "success";
   const isError = status === "error";
-
-  console.log(status, 'status')
+  const isOffline = status === "offline";
 
   useEffect(() => {
     if (!isLoading) return;
@@ -56,7 +58,7 @@ export function AILoadingDialog({
   }, [isLoading]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open}>
       <DialogContent className="sm:max-w-md [&>button]:hidden">
         <div className="flex flex-col items-center space-y-6 py-4">
 
@@ -73,6 +75,10 @@ export function AILoadingDialog({
             {isError && (
               <XCircle className="h-10 w-10 text-red-500" />
             )}
+            {isOffline && (
+               <XCircle className="h-10 w-10 text-red-500" />
+            )
+            }
           </div>
 
           {/* TITLE */}
@@ -81,12 +87,14 @@ export function AILoadingDialog({
               {isLoading && "Creating a travel plan for you"}
               {isSuccess && "Completed!"}
               {isError && "Something went wrong"}
+              {isOffline && "No Internet Connection"}
             </DialogTitle>
 
             <DialogDescription className="text-sm text-muted-foreground">
               {isLoading && "Please wait while our AI creates your travel plan"}
               {isSuccess && "Your travel plan is ready to view"}
-              {isError && (errorMessage || "Server is busy, please try again later")}
+              {isError && (errorMessage || "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.")}
+              {isOffline && "Your Connection seems unstable, please check your internet and try again"}
             </DialogDescription>
           </div>
 
@@ -142,8 +150,25 @@ export function AILoadingDialog({
 
           {isError && (
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setOpen(false)}>
+               <Button variant="outline" onClick={() => {
+                reset()
+                onRetry()
+              }}>
+                Try Again
+              </Button>
+              <Button variant="outline" onClick={() => {
+                reset()
+              }}>
                 Close
+              </Button>
+            </div>
+          )}
+          {isOffline && (
+            <div className="flex gap-2">
+               <Button variant="outline" onClick={() => {
+                onRetry()
+              }}>
+                Try Again
               </Button>
             </div>
           )}

@@ -1,49 +1,57 @@
-"use client"
-import { toast } from "sonner";
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { db } from '@/service/firebaseConfig'
-import { doc, getDoc } from 'firebase/firestore'
+"use client";
 
-import { TripHeader, TripItinerary, TripBudget, TripNotes } from "../components"
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+import {
+  TripHeader,
+  TripItinerary,
+  TripBudget,
+  TripNotes,
+} from "../components";
+import { useTripStore } from "@/store/useTripStore";
+import { useShallow } from "zustand/react/shallow";
+import { SkeletonCard
+  
+ } from "../components/SkeletonCard";
 export default function ViewTrip() {
-  const {tripid }= useParams()
+  const navigate = useNavigate();
+  const { tripid } = useParams();
+  const { currentTrip, fetchUserTripById, loading } = useTripStore(
+    useShallow((state) => ({
+      currentTrip: state.currentTrip,
+      fetchUserTripById: state.fetchUserTripById,
+      loading: state.loading,
+    })),
+  );
 
-    const [trip, setTrip] = useState({})
-
-    useEffect(()=>{
-        tripid && GetTripData()
-     },[tripid])
-     
-    const GetTripData = async() => {
-        const docRef = doc(db,'trip',tripid)
-        const docSnap = await getDoc(docRef)
-
-        if(docSnap.exists()){
-           
-            setTrip(docSnap.data())
-        }else{
-            console.log('Document not exist')
-            toast('No Trip Found !')
-        }
+  useEffect(() => {
+    if (!tripid) {
+      navigate("/");
+      return;
     }
+    fetchUserTripById(tripid);
+  }, [tripid, fetchUserTripById, navigate]);
+
+  if (loading || !currentTrip) {
+   return(
+      <SkeletonCard />
+   ) 
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 font-sans">
-
-
       {/* Header */}
-      <TripHeader header={trip} />
+      <TripHeader header={currentTrip} />
 
       {/* Day 1 */}
-      <TripItinerary itinerary={trip} />
+      <TripItinerary itinerary={currentTrip} />
 
       {/* Notes section */}
-      <TripNotes notes={trip} />
+      <TripNotes notes={currentTrip} />
 
       {/* Budget summary */}
-      <TripBudget budget={trip} />
+      <TripBudget budget={currentTrip} />
     </div>
-  )
+  );
 }
-
