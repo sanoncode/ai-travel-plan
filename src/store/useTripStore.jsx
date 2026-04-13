@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { db } from "@/service/firebaseConfig";
+import { db } from "@/services/firebaseConfig";
 import { collection, query, where, doc, getDocs,getDoc } from "firebase/firestore";
 
 export const useTripStore = create((set, get) => ({
