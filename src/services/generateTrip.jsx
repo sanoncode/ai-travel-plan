@@ -5,25 +5,13 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 // === ERROR TYPE (biar konsisten & anti typo)
 export const ERROR_TYPE = {
-  NOT_AUTH: "NOT_AUTHENTICATED",
-  INVALID_FORM: "INVALID_FORM",
   AI_ERROR: "AI_ERROR",
   INVALID_JSON: "INVALID_JSON",
   FIREBASE_ERROR: "FIREBASE_ERROR",
 };
 
 export const generateTripService = async ({ formData, user }) => {
-  // ========================
-  // VALIDATION
-  // ========================
-  if (!user) {
-    throw new Error(ERROR_TYPE.NOT_AUTH);
-  }
-
-  if (!formData.country || !formData.people || !formData.budget) {
-    throw new Error(ERROR_TYPE.INVALID_FORM);
-  }
-
+ 
   // ========================
   // BUILD PROMPT
   // ========================
