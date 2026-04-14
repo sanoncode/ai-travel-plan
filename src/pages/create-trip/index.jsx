@@ -32,7 +32,6 @@ function CreateTrip() {
     setGeneration,
     setResult,
     setField,
-    result
   } = useCreateTripStore(
     useShallow((state) => ({
       formData: state.formData,
@@ -42,77 +41,58 @@ function CreateTrip() {
       setGeneration: state.setGeneration,
       setResult: state.setResult,
       setField: state.setField,
-      result: state.result
     })),
   );
 
-  const { setDays } = useTripForm()
-
+  const { validateForm, setDays } = useTripForm();
+  const { isValid, message } = validateForm();
 
   const OnGenerateTrip = async () => {
-  // ========================
-  // AUTH GUARD
-  // ========================
-  if (!user) {
-    setOpenLoginDialog(true);
-    return;
-  }
-
-  try {
     // ========================
-    // START LOADING
+    // AUTH GUARD
     // ========================
-    setGeneration({ status: "loading", error: null });
-
-    // ⚠️ PENTING: JANGAN buka dialog dulu
-    const res = await generateTripService({ formData, user });
-
-    // ========================
-    // SUCCESS
-    // ========================
-    setResult({
-      tripId: res.docId,
-      tripData: res.parsed,
-    });
-
-    setGeneration({ status: "success", error: null });
-
-    // ✅ buka dialog hanya kalau sukses / valid flow
-    setUi("openGenerateDialog", true);
-
-  } catch (err) {
-    console.log("error:", err.message);
-
-    const errorType = err.message;
-
-    // ========================
-    // VALIDATION → TOAST
-    // ========================
-    if (errorType === "INVALID_FORM") {
-      toast("Please fill all fields");
-      return; // ⛔ STOP
-    }
-
-    // ========================
-    // AUTH (fallback safety)
-    // ========================
-    if (errorType === "NOT_AUTHENTICATED") {
+    if (!user) {
       setOpenLoginDialog(true);
       return;
     }
 
-    // ========================
-    // SERVER / AI / FIREBASE → DIALOG
-    // ========================
-    setGeneration({
-      status: "error",
-      error: errorType,
-    });
+    if (!isValid) {
+      toast(message);
+      return;
+    }
 
-    // ✅ hanya buka dialog untuk error server
-    setUi("openGenerateDialog", true);
-  }
-};
+    try {
+
+      // ✅ buka dialog
+      setUi("openGenerateDialog", true);
+      // START LOADING
+      // ========================
+      setGeneration({ status: "loading", error: null });
+
+      // ⚠️ PENTING: JANGAN buka dialog dulu
+      const res = await generateTripService({ formData, user });
+
+
+      // ========================
+      // SUCCESS
+      // ========================
+      setResult({
+        tripId: res.docId,
+        tripData: res.parsed,
+      });
+
+      setGeneration({ status: "success", error: null });
+    } catch (err) { 
+      const errorType = err.message;
+      // ========================
+      // SERVER / AI / FIREBASE → DIALOG
+      // ========================
+      setGeneration({
+        status: "error",
+        error: errorType,
+      });
+    }
+  };
 
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl-px-10 px-5 mt-10">
@@ -207,7 +187,7 @@ function CreateTrip() {
       <div className="my-10 flex justify-end">
         <Button
           onClick={OnGenerateTrip}
-          disabled={ui.isDaysInvalid || generation.status === "loading"}
+          disabled={ ui.isDaysInvalid || generation.status === "loading"}
         >
           {generation.status === "loading" ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
@@ -219,12 +199,7 @@ function CreateTrip() {
 
       <GoogleLoginDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
 
-      <AILoadingDialog
-        open={ui.openGenerateDialog}
-        status={generation.status}
-        onRetry={OnGenerateTrip}
-        viewTripId={result.tripId}
-      />
+      <AILoadingDialog onRetry={OnGenerateTrip} />
     </div>
   );
 }
