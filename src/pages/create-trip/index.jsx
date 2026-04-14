@@ -1,11 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AILoadingDialog } from "./components/AILoadingDialog";
-import {
-  SelectBudgetOptions,
-  SelectTravelerList,
-} from "@/constants/options";
-
+import { SelectBudgetOptions, SelectTravelerList } from "@/constants/options";
 
 import { CountrySelect, StateSelect } from "react-country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
@@ -13,11 +9,12 @@ import "react-country-state-city/dist/react-country-state-city.css";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-
 import GoogleLoginDialog from "./components/GoogleLoginDialog";
 import { useUserStore } from "@/store/useUserStore";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/react/shallow";
+import { generateTripService } from "@/services/generateTrip";
+import { useTripForm } from "@/hook/useTripForm";
 
 function CreateTrip() {
   const { user, openLoginDialog, setOpenLoginDialog } = useUserStore(
@@ -29,44 +26,73 @@ function CreateTrip() {
   );
   const {
     formData,
-    openGenerateDialog,
-    setOpenGenerateDialog,
-    generatingStatus,
-    viewTripId,
-    generateTrip,
-    handleInputchange,
-    limitDays,
-    
+    ui,
+    generation,
+    setUi,
+    setGeneration,
+    setResult,
+    setField,
   } = useCreateTripStore(
     useShallow((state) => ({
       formData: state.formData,
-      openGenerateDialog: state.openGenerateDialog,
-      generatingStatus: state.generatingStatus,
-      viewTripId: state.viewTripId,
-      limitDays: state.limitDays,
-      setOpenGenerateDialog: state.setOpenGenerateDialog,
-      generateTrip: state.generateTrip,
-      handleInputchange: state.handleInputchange
+      ui: state.ui,
+      generation: state.generation,
+      setUi: state.setUi,
+      setGeneration: state.setGeneration,
+      setResult: state.setResult,
+      setField: state.setField,
     })),
   );
 
- 
+  const { validateForm, setDays } = useTripForm();
+  const { isValid, message } = validateForm();
 
- const OnGenerateTrip = async () => {
-  if (!user) {
-    setOpenLoginDialog(true);
-    return;
-  }
-
-  try {
-    await generateTrip(user);
-  } catch (err) {
-    if (err.message === "VALIDATION_ERROR") {
-      toast("please fill all the fields");
+  const OnGenerateTrip = async () => {
+    // ========================
+    // AUTH GUARD
+    // ========================
+    if (!user) {
+      setOpenLoginDialog(true);
+      return;
     }
-  }
-};
 
+    if (!isValid) {
+      toast(message);
+      return;
+    }
+
+    try {
+
+      // ✅ buka dialog
+      setUi("openGenerateDialog", true);
+      // START LOADING
+      // ========================
+      setGeneration({ status: "loading", error: null });
+
+      // ⚠️ PENTING: JANGAN buka dialog dulu
+      const res = await generateTripService({ formData, user });
+
+
+      // ========================
+      // SUCCESS
+      // ========================
+      setResult({
+        tripId: res.docId,
+        tripData: res.parsed,
+      });
+
+      setGeneration({ status: "success", error: null });
+    } catch (err) { 
+      const errorType = err.message;
+      // ========================
+      // SERVER / AI / FIREBASE → DIALOG
+      // ========================
+      setGeneration({
+        status: "error",
+        error: errorType,
+      });
+    }
+  };
 
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl-px-10 px-5 mt-10">
@@ -85,14 +111,14 @@ function CreateTrip() {
           </h2>
           <div className="flex gap-5">
             <CountrySelect
-              onChange={(country) => handleInputchange("country", country)}
+              onChange={(country) => setField("country", country)}
               defaultValue={formData.country}
               placeHolder="Select Country"
             />
 
             <StateSelect
               countryid={formData.country?.id}
-              onChange={(states) => handleInputchange("states", states)}
+              onChange={(states) => setField("states", states)}
               defaultValue={formData.states}
               placeHolder="Select States"
             />
@@ -108,13 +134,12 @@ function CreateTrip() {
             placeholder={"Ex. 3"}
             type="number"
             className={
-              limitDays ? "border-red-500 border-s" : "border-gray-300"
+              ui.isDaysInvalid ? "border-red-500 border-s" : "border-gray-300"
             }
             min={1}
             max={7}
-            onChange={(e) => handleInputchange("days", e.target.value)}
+            onChange={(e) => setDays(e.target.value)}
           />
-          
         </div>
       </div>
       <div className="mt-10">
@@ -129,7 +154,7 @@ function CreateTrip() {
               className={`p-4 border rounded-lg hover:shadow-lg ${
                 formData.budget === item.desc && "shadow-lg border-black"
               }`}
-              onClick={() => handleInputchange("budget", item.desc)}
+              onClick={() => setField("budget", item.desc)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
               <h2 className="font-bold text-lg">{item.title}</h2>
@@ -150,7 +175,7 @@ function CreateTrip() {
               className={`p-4 border rounded-lg hover:shadow-lg ${
                 formData.people === item.people && "shadow-lg border-black"
               }`}
-              onClick={() => handleInputchange("people", item.people)}
+              onClick={() => setField("people", item.people)}
             >
               <h2 className="text-4xl">{item.icon}</h2>
               <h2 className="font-bold text-lg">{item.title}</h2>
@@ -162,9 +187,9 @@ function CreateTrip() {
       <div className="my-10 flex justify-end">
         <Button
           onClick={OnGenerateTrip}
-          disabled={limitDays || generatingStatus === "loading"}
+          disabled={ ui.isDaysInvalid || generation.status === "loading"}
         >
-          {generatingStatus === "loading" ? (
+          {generation.status === "loading" ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
           ) : (
             "Generate Trip"
@@ -174,13 +199,7 @@ function CreateTrip() {
 
       <GoogleLoginDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
 
-      <AILoadingDialog
-        open={openGenerateDialog}
-        setOpen={setOpenGenerateDialog}
-        status={generatingStatus}
-        onRetry={OnGenerateTrip}
-        viewTripId={viewTripId}
-      />
+      <AILoadingDialog onRetry={OnGenerateTrip} />
     </div>
   );
 }
