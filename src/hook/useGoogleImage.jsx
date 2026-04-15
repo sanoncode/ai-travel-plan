@@ -1,5 +1,5 @@
-import { GetPlaceDetails } from "@/service/GlobalApi";
-import { PHOTO_REF_URL } from "@/service/GlobalApi";
+import { GetPlaceDetails } from "@/services/GlobalApi";
+import { PHOTO_REF_URL } from "@/services/GlobalApi";
 import { useEffect, useState } from "react";
 
 function useGoogleImage(label) {
