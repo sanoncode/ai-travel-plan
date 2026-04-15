@@ -60,7 +60,7 @@ export const useCreateTripStore = create((set) => ({
     })
   },
    // ========================
-  // RESET
+  // Reset
   // ========================
   reset: () =>
     set({

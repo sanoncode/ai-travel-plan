@@ -13,7 +13,7 @@ import GoogleLoginDialog from "./components/GoogleLoginDialog";
 import { useUserStore } from "@/store/useUserStore";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/react/shallow";
-import { generateTripService } from "@/services/generateTrip";
+import { useGenerateTrip } from "@/hook/useGenerateTrip";
 import { useTripForm } from "@/hook/useTripForm";
 
 function CreateTrip() {
@@ -28,24 +28,19 @@ function CreateTrip() {
     formData,
     ui,
     generation,
-    setUi,
-    setGeneration,
-    setResult,
     setField,
   } = useCreateTripStore(
     useShallow((state) => ({
       formData: state.formData,
       ui: state.ui,
       generation: state.generation,
-      setUi: state.setUi,
-      setGeneration: state.setGeneration,
-      setResult: state.setResult,
       setField: state.setField,
     })),
   );
 
   const { validateForm, setDays } = useTripForm();
   const { isValid, message } = validateForm();
+  const { generateTrip } = useGenerateTrip();
 
   const OnGenerateTrip = async () => {
     // ========================
@@ -61,37 +56,8 @@ function CreateTrip() {
       return;
     }
 
-    try {
+    generateTrip({ formData, user })
 
-      // ✅ buka dialog
-      setUi("openGenerateDialog", true);
-      // START LOADING
-      // ========================
-      setGeneration({ status: "loading", error: null });
-
-      // ⚠️ PENTING: JANGAN buka dialog dulu
-      const res = await generateTripService({ formData, user });
-
-
-      // ========================
-      // SUCCESS
-      // ========================
-      setResult({
-        tripId: res.docId,
-        tripData: res.parsed,
-      });
-
-      setGeneration({ status: "success", error: null });
-    } catch (err) { 
-      const errorType = err.message;
-      // ========================
-      // SERVER / AI / FIREBASE → DIALOG
-      // ========================
-      setGeneration({
-        status: "error",
-        error: errorType,
-      });
-    }
   };
 
   return (
