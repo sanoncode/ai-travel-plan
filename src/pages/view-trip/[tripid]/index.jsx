@@ -9,19 +9,23 @@ import {
   TripBudget,
   TripNotes,
 } from "../components";
+import { useGetTrips } from "@/hook/useGetTrips";
 import { useTripStore } from "@/store/useTripStore";
 import { useShallow } from "zustand/react/shallow";
-import { SkeletonCard
-  
- } from "../components/SkeletonCard";
+import  SkeletonCard  from "../components/SkeletonCard";
+import ErrorPage from "@/components/custom/ErrorPage";
+
+
 export default function ViewTrip() {
   const navigate = useNavigate();
   const { tripid } = useParams();
-  const { currentTrip, fetchUserTripById, loading } = useTripStore(
+  
+  const { GetUserTrip } = useGetTrips();
+  const { currentTrip, loading, errorTrip } = useTripStore(
     useShallow((state) => ({
       currentTrip: state.currentTrip,
-      fetchUserTripById: state.fetchUserTripById,
       loading: state.loading,
+      errorTrip: state.errorTrip,
     })),
   );
 
@@ -30,18 +34,19 @@ export default function ViewTrip() {
       navigate("/");
       return;
     }
-    fetchUserTripById(tripid);
-  }, [tripid, fetchUserTripById, navigate]);
+    GetUserTrip(tripid);
+  }, [tripid, navigate]);
 
-  if (loading || !currentTrip) {
-   return(
-      <SkeletonCard />
-   ) 
+  if(errorTrip){
+    return <ErrorPage />
   }
-
+  if(loading || !currentTrip){
+    return <SkeletonCard />
+  }
+ 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 font-sans">
-      {/* Header */}
+      
       <TripHeader header={currentTrip} />
 
       {/* Day 1 */}

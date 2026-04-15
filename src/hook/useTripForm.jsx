@@ -32,7 +32,7 @@ export const useTripForm = () => {
         isValid: false,
         message: "Please fill all fields",
       };
-    }
+    } 
 
     return { isValid: true };
   };
