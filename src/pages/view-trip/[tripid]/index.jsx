@@ -19,7 +19,7 @@ import ErrorPage from "@/components/custom/ErrorPage";
 export default function ViewTrip() {
   const navigate = useNavigate();
   const { tripid } = useParams();
-  
+
   const { GetUserTrip } = useGetTrips();
   const { currentTrip, loading, errorTrip } = useTripStore(
     useShallow((state) => ({
@@ -34,13 +34,18 @@ export default function ViewTrip() {
       navigate("/");
       return;
     }
+  
     GetUserTrip(tripid);
-  }, [tripid, navigate]);
+  }, [tripid,navigate]);
+
 
   if(errorTrip){
     return <ErrorPage />
   }
-  if(loading || !currentTrip){
+  if(!currentTrip){
+    return <SkeletonCard />
+  }
+  if(loading){
     return <SkeletonCard />
   }
  
