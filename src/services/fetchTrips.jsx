@@ -1,11 +1,13 @@
 import { db } from "@/services/firebaseConfig";
 import { collection, query, where, doc, getDocs,getDoc } from "firebase/firestore";
-
+import { normalizeTrip } from "@/lib/utils";
 // === ERROR TYPE (biar konsisten & anti typo)
 export const ERROR_TYPE = {
   VIEW_TRIP_ERROR: "VIEW_TRIP_ERROR",
   MY_TRIP_ERROR: "MY_TRIP_ERROR",
 };
+
+
 
 
 const fetchUserTrips = async (email) => {
@@ -39,10 +41,14 @@ const fetchUserTripById = async (tripId) => {
       //single doc use getDoc
       const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        return docSnap.data()
-      }
-        return null
+      if (!docSnap.exists()) {
+      return null;
+    }
+
+    const raw = docSnap.data();
+   
+    // 🔥 penting: normalize di sini
+    return normalizeTrip(raw);
       
     } catch (err) {
       console.error(err)

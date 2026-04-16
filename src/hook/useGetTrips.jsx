@@ -43,7 +43,7 @@ export const useGetTrips = () => {
     setLoading(true);
 
     const [trip, error] = await safeAsync(() => fetchUserTripById(tripId));
-
+ 
     if (error) {
       setErrorTrip(error.message);
     }
