@@ -1,4 +1,4 @@
-import { NEW_AI_PROMPT } from "@/constants/options";
+import { USER_PROMPT } from "@/constants/options";
 import { chatSession } from "@/services/AImodel";
 import { db } from "@/services/firebaseConfig";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -16,7 +16,7 @@ export const generateTripService = async ({ formData, user }) => {
   // ========================
   // BUILD PROMPT
   // ========================
-  const FINAL_PROMPT = NEW_AI_PROMPT
+  const FINAL_PROMPT = USER_PROMPT
     .replace("{country}", formData.country?.name)
     .replace("{states}", formData.states?.name)
     .replace("{days}", formData.days)
