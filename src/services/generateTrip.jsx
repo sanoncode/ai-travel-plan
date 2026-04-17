@@ -1,7 +1,8 @@
-import { AI_PROMPT } from "@/constants/options";
+import { NEW_AI_PROMPT } from "@/constants/options";
 import { chatSession } from "@/services/AImodel";
 import { db } from "@/services/firebaseConfig";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import generateAI from "@/services/ai";
 
 // === ERROR TYPE (biar konsisten & anti typo)
 export const ERROR_TYPE = {
@@ -15,7 +16,7 @@ export const generateTripService = async ({ formData, user }) => {
   // ========================
   // BUILD PROMPT
   // ========================
-  const FINAL_PROMPT = AI_PROMPT
+  const FINAL_PROMPT = NEW_AI_PROMPT
     .replace("{country}", formData.country?.name)
     .replace("{states}", formData.states?.name)
     .replace("{days}", formData.days)
@@ -64,3 +65,10 @@ export const generateTripService = async ({ formData, user }) => {
   // ========================
   return { docId, parsed };
 };
+
+export const newGenerateTripService = async ({formData}) => {
+    const aiRes = await generateAI({ formData });
+
+    console.log(aiRes, 'aiRes')
+  
+}

@@ -1,7 +1,7 @@
 
 import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/react/shallow";
-import { generateTripService } from "@/services/generateTrip";
+import { newGenerateTripService } from "@/services/generateTrip";
 import { safeAsync } from "@/lib/utils";
 
 export const useGenerateTrip = () => {
@@ -28,7 +28,7 @@ export const useGenerateTrip = () => {
           // ========================
           setGeneration({ status: "loading", error: null });
 
-    const [res, error] = await safeAsync(() => generateTripService({ formData, user }));
+    const [res, error] = await safeAsync(() => newGenerateTripService({ formData, user }));
     
             if(error){
             const errorType = error.message;
