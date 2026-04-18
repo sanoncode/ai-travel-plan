@@ -9,7 +9,7 @@ import "react-country-state-city/dist/react-country-state-city.css";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import GoogleLoginDialog from "./components/GoogleLoginDialog";
+import GoogleLoginDialog from "../../components/custom/GoogleLoginDialog";
 import { useUserStore } from "@/store/useUserStore";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/react/shallow";

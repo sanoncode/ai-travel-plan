@@ -3,13 +3,20 @@ import { create } from "zustand";
 export const useUserStore = create((set)=>({
 
     //data
-    user: JSON.parse(localStorage.getItem('user') || null),
+    user: JSON.parse(localStorage.getItem('user') || "null"),
     openLoginDialog: false,
 
     //action
-    setUser: (userData) => {
-        localStorage.setItem('user',JSON.stringify(userData))
-        set({user: userData})
+        setUser: (userData) => {
+        const mappedUser = {
+        id: userData.id,
+        name: userData.user_metadata?.full_name,
+        email: userData.email,
+        avatar: userData.user_metadata?.avatar_url,
+        };
+
+        localStorage.setItem("user", JSON.stringify(mappedUser));
+        set({ user: mappedUser });
     },
     removeUser: () => {
         localStorage.removeItem('user')

@@ -1,4 +1,5 @@
 import { useUserStore } from "@/store/useUserStore";
+import { supabase } from "@/lib/supabase";
 import { Button } from "../ui/button";
 import {
   Popover,
@@ -6,10 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import GoogleLoginDialog from "@/pages/create-trip/components/GoogleLoginDialog";
-
-import { googleLogout } from "@react-oauth/google";
-
+import GoogleLoginDialog from "@/components/custom/GoogleLoginDialog";
 import Images from "./Images";
 import { useShallow } from "zustand/react/shallow";
 
@@ -22,6 +20,13 @@ function Header() {
       setOpenLoginDialog: state.setOpenLoginDialog,
     })),
   );
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut()
+    if(error) console.log(error)
+      removeUser();
+      window.location.replace("/");
+    };
 
   return (
     <>
@@ -52,22 +57,17 @@ function Header() {
             <Popover>
               <PopoverTrigger>
                 <Images
-                  src={user?.picture}
+                  src={user?.avatar}
                   className="h-[35px] w-[35px] rounded-full"
                 />
               </PopoverTrigger>
               <PopoverContent>
                 <h2
                   className="cursor-pointer"
-                  onClick={() => {
-                    //google logout
-                    googleLogout();
-                    //zustand remove localstorage
-                    removeUser();
-                    window.location.replace("/");
-                  }}
-                >
+                  onClick={() => handleLogout()}
+                  >
                   Logout
+          
                 </h2>
               </PopoverContent>
             </Popover>
