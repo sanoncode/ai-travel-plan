@@ -10,11 +10,11 @@ export default async function handler(req, res) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini", // murah
-        messages: [
+        model: "groq/compound", // murah
+         messages: [
           {
             role: "system",
-            content: "You are a travel planner AI",
+            content: `${AI_PROMPT}`,
           },
           {
             role: "user",

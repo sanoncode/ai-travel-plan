@@ -4,12 +4,11 @@
 export default async function handler(req, res) {
   
   const API_KEY = process.env.OPENAI_API_KEY
-  const AI_PROMPT = process.env.AI_PROMPT
-  console.log(API_KEY,'APIKEY')
+  const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT
   try {
     const { formData } = JSON.parse(req.body);
     
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch(" ", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${API_KEY}`,
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `${AI_PROMPT}`,
+            content: `${SYSTEM_PROMPT}`,
           },
           {
             role: "user",
