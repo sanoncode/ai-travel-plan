@@ -31,7 +31,7 @@ function MyTrip() {
       navigate("/");
       return;
     }
-    GetUserTrips(user?.email);
+    GetUserTrips(user?.id);
   }, [user, navigate]);
 
   if (errorTrip) {

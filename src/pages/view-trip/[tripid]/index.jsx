@@ -29,6 +29,8 @@ export default function ViewTrip() {
     })),
   );
 
+  console.log(currentTrip, 'current trip')
+
   useEffect(() => {
     if (!tripid) {
       navigate("/");

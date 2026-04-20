@@ -50,6 +50,8 @@ export function AILoadingDialog({
       result: state.result,
     })),
   );
+  console.log(generation,'state generation')
+  console.log(result,'state result')
 
   const errorType = generation.error;
 

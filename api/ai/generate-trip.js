@@ -1,14 +1,37 @@
 // /api/ai/generate-trip.js
 
+import { supabase } from "../lib/supabaseServer.js";
+
 /* eslint-env node */
 export default async function handler(req, res) {
-  
-  const API_KEY = process.env.OPENAI_API_KEY
-  const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT
+  // const API_URL = process.env.AI_API_URL;
+
+  const API_KEY = process.env.OPENAI_API_KEY;
+  const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT;
+
   try {
-    const { formData } = JSON.parse(req.body);
-    
-    const response = await fetch(" ", {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+      return res.status(401).json({ error: "NO_TOKEN" });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser(token);
+
+    if (userError || !user) {
+      return res.status(401).json({ error: "INVALID_TOKEN" });
+    }
+
+    const userId = user.id;
+
+    const formData = req.body.formData
+
+    const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${API_KEY}`,
@@ -28,16 +51,36 @@ export default async function handler(req, res) {
         ],
       }),
     });
+        if (!aiResponse.ok) {
+      const text = await aiResponse.text();
+      console.error("AI ERROR:", text);
+      return res.status(500).json({ error: "AI_FAILED" });
+    }
 
-    const data = await response.json();
-    console.log(data, 'data')
 
-    const text = data.choices[0].message.content;
+    const data = await aiResponse.json();
+    const parsed = JSON.parse(data.choices[0].message.content);
 
-    res.status(200).json({
-      parsed: JSON.parse(text), // sama kayak flow lo sekarang
-    });
+    const { data: trip, error: supaError } = await supabase
+      .from("trips")
+      .insert([
+        {
+          user_id: userId,
+          form_data: formData,
+          result: parsed,
+        },
+      ])
+      .select()
+      .single();
+
+    if (supaError) {
+        console.error('SUPABASE ERROR', supaError )
+        return res.status(500).json({ error: "SUPA_ERROR" });
+    }
+
+    res.status(200).json(trip);
   } catch (err) {
-    res.status(500).json({ error: "AI_FAILED" });
+    console.error("FULL ERROR:", err);
+    res.status(500).json({ error: err.message });
   }
 }

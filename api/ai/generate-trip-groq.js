@@ -1,12 +1,17 @@
-// /api/ai/generate-trip.js
+// /api/ai/generate-trip-groq.js
+
+/* eslint-env node */
 export default async function handler(req, res) {
+
+   const API_KEY = process.env.OPENAI_API_KEY
+  const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT
   try {
     const { formData } = JSON.parse(req.body);
 
     const response = await fetch("", {
       method: "POST",
       headers: {
-        Authorization: `fBearer ${process.env.GROQAI_SECRET_KEY}`,
+        Authorization: `fBearer ${API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -14,7 +19,7 @@ export default async function handler(req, res) {
          messages: [
           {
             role: "system",
-            content: `${AI_PROMPT}`,
+            content: `${SYSTEM_PROMPT}`,
           },
           {
             role: "user",

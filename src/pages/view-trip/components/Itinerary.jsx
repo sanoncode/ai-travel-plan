@@ -27,7 +27,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
  {/* Trip Daily Itinerary */}
 function TripItinerary({itinerary}){
 
-  const {daily_itinerary = {}} = itinerary.tripData ?? {}
+  const {daily_itinerary = {}} = itinerary ?? {}
   
     // sort the daily itinerary based on the day numbner, extract the number from the key and sort based on it
      const sorted = Object.entries(daily_itinerary).sort((a, b) => {

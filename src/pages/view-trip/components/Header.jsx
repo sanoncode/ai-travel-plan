@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Calendar,
   MapPin,
@@ -7,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 
  {/* Trip Header */}
 function TripHeader({header}){
-  const { trip_header } = header.tripData || {}
+  const { trip_header } = header|| {}
     return (
 
        <div className="space-y-4 border-b pb-6">

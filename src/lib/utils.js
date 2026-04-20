@@ -37,3 +37,11 @@ export const normalizeTrip = (data) => {
     },
   };
 };
+
+export const normalizeTrips = (trips) => {
+    return trips.map((trip)=>({
+      id:trip.id,
+      createdAt: trip.created_at,
+      ...(trip.result ?? {})
+    }))
+};

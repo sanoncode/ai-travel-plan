@@ -1,7 +1,10 @@
-const openAiProvider = async({formData}) =>{
-
+const openAiProvider = async({formData, session}) =>{
     const res = await fetch('/api/ai/generate-trip',{
         method:'POST',
+        headers:{
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": 'application/json'
+        },
         body:JSON.stringify({formData})
     })
 
@@ -11,10 +14,7 @@ const openAiProvider = async({formData}) =>{
 
     const data = await res.json()
 
-    return {
-        parsed: data.parsed,
-        raw: data.raw
-    }
+    return data
 }
 
 export default openAiProvider
