@@ -1,6 +1,7 @@
 // /api/ai/generate-trip.js
 
-import { supabase } from "../lib/supabaseServer.js";
+import { checkLimitTrip } from "../../lib/limitTrip.js";
+import { supabase } from "../../lib/supabaseServer.js";
 
 /* eslint-env node */
 export default async function handler(req, res) {
@@ -29,6 +30,15 @@ export default async function handler(req, res) {
 
     const userId = user.id;
 
+    const isLimitReached = await checkLimitTrip(userId)
+
+    if (isLimitReached) {
+
+      return res.status(429).json({
+        error: "DAILY_LIMIT_REACHED",
+      })
+    }
+
     const formData = req.body.formData
 
     const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -51,7 +61,7 @@ export default async function handler(req, res) {
         ],
       }),
     });
-        if (!aiResponse.ok) {
+    if (!aiResponse.ok) {
       const text = await aiResponse.text();
       console.error("AI ERROR:", text);
       return res.status(500).json({ error: "AI_FAILED" });
@@ -74,8 +84,8 @@ export default async function handler(req, res) {
       .single();
 
     if (supaError) {
-        console.error('SUPABASE ERROR', supaError )
-        return res.status(500).json({ error: "SUPA_ERROR" });
+      console.error('SUPABASE ERROR', supaError)
+      return res.status(500).json({ error: "SUPA_ERROR" });
     }
 
     res.status(200).json(trip);

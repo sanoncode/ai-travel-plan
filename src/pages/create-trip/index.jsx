@@ -42,6 +42,7 @@ function CreateTrip() {
   const { isValid, message } = validateForm();
   const { generateTrip } = useGenerateTrip();
 
+  console.log(generation, 'generation')
   const OnGenerateTrip = async () => {
     // ========================
     // AUTH GUARD

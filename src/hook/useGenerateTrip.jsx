@@ -26,6 +26,7 @@ export const useGenerateTrip = () => {
     );
 
     if (error) {
+      console.log(error,'error di hook')
       const errorType = error.message;
       // ========================
       // SERVER / AI / FIREBASE → DIALOG
