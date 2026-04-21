@@ -13,8 +13,6 @@ import { FcGoogle } from "react-icons/fc";
 // eslint-disable-next-line react/prop-types
 function GoogleLoginDialog({open, setOpen}) {
 
-  const setUser = useUserStore((state => state.setUser))
-
   const handleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
