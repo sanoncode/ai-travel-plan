@@ -37,3 +37,25 @@ export const normalizeTrip = (data) => {
     },
   };
 };
+
+export const normalizeTrips = (trips) => {
+    return trips.map((trip)=>({
+      id:trip.id,
+      createdAt: trip.created_at,
+      ...(trip.result ?? {})
+    }))
+};
+
+export const getTimeUntilReset = () => {
+  const now = new Date()
+  const reset = new Date()
+
+  reset.setHours(24, 0, 0, 0)
+
+  const diff = reset - now
+
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+
+  return `${hours}h ${minutes}m`
+}

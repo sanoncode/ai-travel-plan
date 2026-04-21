@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 
 function UserTripCarditem({trip}) {
 
-   const { trip_header } = trip.tripData || {}
+   const { trip_header } = trip || {}
 
   return (
        <Link to={`/view-trip/${trip.id}`}>

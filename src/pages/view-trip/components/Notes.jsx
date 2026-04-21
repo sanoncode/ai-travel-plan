@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 
  {/* Trip Notes */}
 function TripNotes({notes}){
 
-  const { trip_notes } = notes.tripData || {}
+  const { trip_notes } = notes || {}
 
     return (
 

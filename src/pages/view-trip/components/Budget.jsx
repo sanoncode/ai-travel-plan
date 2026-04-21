@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 
  {/* Budget summary */}
 function TripBudget({budget}){
-  const { Accommodation, Transportation, 'Food & Dining': FoodDining, Attractions, Shopping, Miscellaneous, Total } = budget.tripData?.budget_estimate || {}
+  const { Accommodation, Transportation, 'Food & Dining': FoodDining, Attractions, Shopping, Miscellaneous, Total } = budget.budget_estimate || {}
     return (
 
       <div className="border rounded-lg p-4 space-y-3">

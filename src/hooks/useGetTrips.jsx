@@ -18,16 +18,17 @@ export const useGetTrips = () => {
     })),
   );
 
-  const GetUserTrips = async (email) => {
+  const GetUserTrips = async (userId) => {
     // =======================
     // START LOADING
     // =======================
     setLoading(true);
 
-    const [trips, error] = await safeAsync(() => fetchUserTrips(email));
+    const [trips, error] = await safeAsync(() => fetchUserTrips(userId));
 
     if (error) {
       setErrorTrip(error.message);
+      return
     }
     // =======================
     // SET TRIPS
@@ -46,6 +47,7 @@ export const useGetTrips = () => {
  
     if (error) {
       setErrorTrip(error.message);
+      return
     }
     // =======================
     // SET TRIP

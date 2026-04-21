@@ -9,12 +9,12 @@ import "react-country-state-city/dist/react-country-state-city.css";
 import { toast } from "sonner";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import GoogleLoginDialog from "./components/GoogleLoginDialog";
+import GoogleLoginDialog from "../../components/custom/GoogleLoginDialog";
 import { useUserStore } from "@/store/useUserStore";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/react/shallow";
-import { useGenerateTrip } from "@/hook/useGenerateTrip";
-import { useTripForm } from "@/hook/useTripForm";
+import { useGenerateTrip } from "@/hooks/useGenerateTrip";
+import { useTripForm } from "@/hooks/useTripForm";
 
 function CreateTrip() {
   const { user, openLoginDialog, setOpenLoginDialog } = useUserStore(
