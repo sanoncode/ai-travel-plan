@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from 'zustand/middleware';
 
 export const useCreateTripStore = create((set) => ({
   // ====
@@ -12,51 +13,53 @@ export const useCreateTripStore = create((set) => ({
     budget: null,
   },
   setField: (name, value) => {
-    set((state) => ({
-      formData: { ...state.formData, [name]: value },
-    }));
+   
+      set((state) => ({
+        formData: { ...state.formData, [name]: value },
+      }))
+
   },
 
-  //====
-  //UI State
-  //====
-  ui: {
-    openGenerateDialog: false,
+//====
+//UI State
+//====
+ui: {
+  openGenerateDialog: false,
     isDaysInvalid: false,
   },
-  setUi: (key, value) => {
-    set((state) => ({
-      ui: { ...state.ui, [key]: value },
-    }));
-  },
+setUi: (key, value) => {
+  set((state) => ({
+    ui: { ...state.ui, [key]: value },
+  }));
+},
 
   //====
   //Generation State
   //====
   generation: {
-    status: "idle",
+  status: "idle",
     error: null,
   },
-  setGeneration: (payload) => {
-    set((state) => ({
-      generation: {
-        ...state.generation,
-        ...payload,
-      },
-    }));
-  },
+setGeneration: (payload) => {
+  set((state) => ({
+    generation: {
+      ...state.generation,
+      ...payload,
+    },
+  }));
+},
   //====
   //Result
   //====
   result: {
-    tripId: "",
+  tripId: "",
     tripData: "",
   },
-  setResult: (data) => {
-    set({
-      result: data,
-    });
-  },
+setResult: (data) => {
+  set({
+    result: data,
+  });
+},
   // ========================
   // Reset
   // ========================
