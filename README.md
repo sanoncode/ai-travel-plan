@@ -21,10 +21,10 @@ This project was built to demonstrate how AI can be leveraged to solve real-worl
 This project demonstrates my proficiency in:
 
 *   **Frontend:** React (Vite), React Router, Tailwind CSS
-*   **Backend/API:**  Firebase
-*   **Database:**  Firestore
+*   **Backend/API:**  Vercel Function
+*   **Database:**  Supabase
 *   **State Management:**  Zustand (lightweight global state for managing form data, auth flow, and UI state)
-*   **AI Integration:**   Google Generative AI API (prompt engineering & response handling)
+*   **AI Integration:**   OPEN API AI (prompt engineering & response handling)
 *   **UX & Logic Handling:**   UX & Logic Handling: Async state management, form persistence, protected routes, request lifecycle handling (loading, cancel, error)
 *   **Tools:**   Git, GitHub, Vercel (deployment), environment configuration
 

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-
 export const useCreateTripStore = create((set) => ({
   // ====
   // Form State
@@ -30,36 +29,35 @@ export const useCreateTripStore = create((set) => ({
       ui: { ...state.ui, [key]: value },
     }));
   },
-  
+
   //====
   //Generation State
   //====
-  generation:{
+  generation: {
     status: "idle",
-    error: null
-
+    error: null,
   },
   setGeneration: (payload) => {
-    set((state)=>({
-      generation:{
+    set((state) => ({
+      generation: {
         ...state.generation,
-        ...payload
-      }
-    }))
+        ...payload,
+      },
+    }));
   },
   //====
   //Result
   //====
-  result:{
-    tripId:"",
-    tripData:""
+  result: {
+    tripId: "",
+    tripData: "",
   },
-  setResult:(data)=>{
+  setResult: (data) => {
     set({
-      result: data
-    })
+      result: data,
+    });
   },
-   // ========================
+  // ========================
   // Reset
   // ========================
   reset: () =>
@@ -67,6 +65,12 @@ export const useCreateTripStore = create((set) => ({
       generation: { status: "idle", error: null },
       result: { tripId: null, tripData: null },
       ui: { openGenerateDialog: false, isDaysInvalid: false },
+      formData: {
+        country: null,
+        states: null,
+        days: null,
+        people: null,
+        budget: null,
+      },
     }),
-
 }));

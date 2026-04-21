@@ -9,7 +9,7 @@ import {
   TripBudget,
   TripNotes,
 } from "../components";
-import { useGetTrips } from "@/hook/useGetTrips";
+import { useGetTrips } from "@/hooks/useGetTrips";
 import { useTripStore } from "@/store/useTripStore";
 import { useShallow } from "zustand/react/shallow";
 import  SkeletonCard  from "../components/SkeletonCard";

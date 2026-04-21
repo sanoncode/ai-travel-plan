@@ -12,10 +12,11 @@ export default defineConfig({
       // eslint-disable-next-line no-undef
       "@": path.resolve(__dirname, "./src"),
     },
-    server: {
+   
+  },
+   server: {
       hmr: {
         overlay: false
       }
     }
-  },
 })
