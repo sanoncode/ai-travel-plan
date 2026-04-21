@@ -5,15 +5,12 @@ import {
   DialogHeader
 } from "@/components/ui/dialog";
 
-import { useUserStore } from "@/store/useUserStore";
 import { supabase } from '@/lib/supabaseClient'
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 
 // eslint-disable-next-line react/prop-types
 function GoogleLoginDialog({open, setOpen}) {
-
-  const setUser = useUserStore((state => state.setUser))
 
   const handleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({

@@ -5,7 +5,7 @@ import { supabase } from "../../server/lib/supabaseServer.js";
 import { API_ERRORS } from '../../src/lib/errors/apiErrors.js'
 /* eslint-env node */
 export default async function handler(req, res) {
-  // const API_URL = process.env.AI_API_URL;
+  const API_URL = process.env.AI_API_URL;
 
   const API_KEY = process.env.OPENAI_API_KEY;
   const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT;
@@ -42,7 +42,7 @@ export default async function handler(req, res) {
 
     const formData = req.body.formData
 
-    const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    const aiResponse = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${API_KEY}`,

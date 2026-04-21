@@ -141,7 +141,7 @@ function TripItinerary({itinerary}){
                       <div key={index+"a"} className="p-3 border rounded-md bg-muted/20">
                         <div className="flex justify-between items-start">
                           <div className="flex gap-2">
-                            {iconMap[activity.type.toLowerCase()] || null}
+                            {iconMap[activity.type.toLowerCase()] || iconMap['default']}
                             <div>
                               <div className="font-medium">{activity.title}</div>
                               <div className="text-sm text-muted-foreground mt-1">{activity.description}</div>
@@ -174,7 +174,7 @@ function TripItinerary({itinerary}){
                       <div key={index+"a"} className="p-3 border rounded-md bg-muted/20">
                         <div className="flex justify-between items-start">
                           <div className="flex gap-2">
-                            {iconMap[activity.type.toLowerCase()] || null}
+                            {iconMap[activity.type.toLowerCase()] || iconMap['default']}
                             <div>
                               <div className="font-medium">{activity.title}</div>
                               <div className="text-sm text-muted-foreground mt-1">{activity.description}</div>
