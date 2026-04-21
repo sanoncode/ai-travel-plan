@@ -45,3 +45,17 @@ export const normalizeTrips = (trips) => {
       ...(trip.result ?? {})
     }))
 };
+
+export const getTimeUntilReset = () => {
+  const now = new Date()
+  const reset = new Date()
+
+  reset.setHours(24, 0, 0, 0)
+
+  const diff = reset - now
+
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+
+  return `${hours}h ${minutes}m`
+}

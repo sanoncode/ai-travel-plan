@@ -6,7 +6,7 @@ import { useShallow } from "zustand/shallow";
 // 🟢 global (alias @)
 import { useUserStore } from "@/store/useUserStore";
 import { useTripStore } from "@/store/useTripStore";
-import { useGetTrips } from "@/hook/useGetTrips";
+import { useGetTrips } from "@/hooks/useGetTrips";
 import ErrorPage from "@/components/custom/ErrorPage";
 
 // 🟡 local components

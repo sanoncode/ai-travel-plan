@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { useUserStore } from "@/store/useUserStore";
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabaseClient'
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 

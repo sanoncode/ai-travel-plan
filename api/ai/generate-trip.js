@@ -1,8 +1,8 @@
 // /api/ai/generate-trip.js
 
-import { checkLimitTrip } from "../../lib/limitTrip.js";
-import { supabase } from "../../lib/supabaseServer.js";
-
+import { checkLimitTrip } from "../../server/lib/limitTrip.js";
+import { supabase } from "../../server/lib/supabaseServer.js";
+import { API_ERRORS } from '../../src/lib/errors/apiErrors.js'
 /* eslint-env node */
 export default async function handler(req, res) {
   // const API_URL = process.env.AI_API_URL;
@@ -11,10 +11,11 @@ export default async function handler(req, res) {
   const SYSTEM_PROMPT = process.env.SYSTEM_PROMPT;
 
   try {
+    
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(401).json({ error: "NO_TOKEN" });
+      return res.status(401).json({ error: API_ERRORS.NO_TOKEN });
     }
 
     const token = authHeader.split(" ")[1];
@@ -25,17 +26,17 @@ export default async function handler(req, res) {
     } = await supabase.auth.getUser(token);
 
     if (userError || !user) {
-      return res.status(401).json({ error: "INVALID_TOKEN" });
+      return res.status(401).json({ error: API_ERRORS.INVALID_TOKEN });
     }
 
     const userId = user.id;
 
     const isLimitReached = await checkLimitTrip(userId)
-
+    
     if (isLimitReached) {
 
       return res.status(429).json({
-        error: "DAILY_LIMIT_REACHED",
+        error: API_ERRORS.DAILY_LIMIT_REACHED,
       })
     }
 
@@ -61,14 +62,30 @@ export default async function handler(req, res) {
         ],
       }),
     });
+    
     if (!aiResponse.ok) {
-      const text = await aiResponse.text();
-      console.error("AI ERROR:", text);
-      return res.status(500).json({ error: "AI_FAILED" });
+        const errorData = await aiResponse.json()
+        const code = errorData.error?.code
+        const type = errorData.error?.type
+       if (code === "insufficient_quota") {
+        return res.status(429).json({
+          error: API_ERRORS.AI_QUOTA_EXCEEDED,
+        });
+      }
+
+      if (type === "rate_limit_error") {
+        return res.status(429).json({
+          error: API_ERRORS.AI_RATE_LIMIT,
+        });
+      }
+
+      return res.status(500).json({
+        error: API_ERRORS.AI_FAILED,
+      });
     }
 
-
     const data = await aiResponse.json();
+
     const parsed = JSON.parse(data.choices[0].message.content);
 
     const { data: trip, error: supaError } = await supabase
@@ -84,13 +101,13 @@ export default async function handler(req, res) {
       .single();
 
     if (supaError) {
-      console.error('SUPABASE ERROR', supaError)
-      return res.status(500).json({ error: "SUPA_ERROR" });
+      
+      return res.status(500).json({ error: API_ERRORS.SUPA_ERROR });
     }
 
     res.status(200).json(trip);
   } catch (err) {
-    console.error("FULL ERROR:", err);
-    res.status(500).json({ error: err.message });
+    
+    res.status(500).json({ error: API_ERRORS.UNKNOWN_ERROR });
   }
 }

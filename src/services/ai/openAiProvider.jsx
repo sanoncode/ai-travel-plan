@@ -8,12 +8,11 @@ const openAiProvider = async({formData, session}) =>{
         body:JSON.stringify({formData})
     })
 
-    if(res.error){
-        throw new Error("OPEN AI ERROR")
-    }
-
     const data = await res.json()
 
+    if(!res.ok){
+        throw new Error(data.error || "UNKOWN ERROR")
+    }
     return data
 }
 

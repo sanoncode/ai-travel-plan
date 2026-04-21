@@ -1,5 +1,5 @@
 import { useUserStore } from "@/store/useUserStore";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabaseClient";
 import { Button } from "../ui/button";
 import {
   Popover,

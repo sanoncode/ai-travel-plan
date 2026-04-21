@@ -26,10 +26,19 @@ export const useGenerateTrip = () => {
     );
 
     if (error) {
-      console.log(error,'error di hook')
+      
       const errorType = error.message;
+    
+      if(errorType === "DAILY_LIMIT_REACHED")
+      {
+          setGeneration({
+          status: "limit",
+          error: errorType,
+        });
+        return;
+      }
       // ========================
-      // SERVER / AI / FIREBASE → DIALOG
+      // API => HOOK 
       // ========================
       setGeneration({
         status: "error",

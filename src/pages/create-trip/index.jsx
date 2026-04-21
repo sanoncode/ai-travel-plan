@@ -13,8 +13,8 @@ import GoogleLoginDialog from "../../components/custom/GoogleLoginDialog";
 import { useUserStore } from "@/store/useUserStore";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/react/shallow";
-import { useGenerateTrip } from "@/hook/useGenerateTrip";
-import { useTripForm } from "@/hook/useTripForm";
+import { useGenerateTrip } from "@/hooks/useGenerateTrip";
+import { useTripForm } from "@/hooks/useTripForm";
 
 function CreateTrip() {
   const { user, openLoginDialog, setOpenLoginDialog } = useUserStore(
@@ -42,7 +42,6 @@ function CreateTrip() {
   const { isValid, message } = validateForm();
   const { generateTrip } = useGenerateTrip();
 
-  console.log(generation, 'generation')
   const OnGenerateTrip = async () => {
     // ========================
     // AUTH GUARD
