@@ -9,8 +9,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Loader2, CheckCircle2, XCircle, Clock, Calendar, Lightbulb } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Calendar,
+  Lightbulb,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/shallow";
 import { ERROR_UI_MAP } from "@/lib/errors/errorMap";
@@ -28,30 +35,27 @@ const generationSteps = [
   "Finalizing and preparing delivery",
 ];
 
-export function AILoadingDialog({
-  onRetry,
-}) {
+export function AILoadingDialog({ onRetry }) {
   const [currentStep, setCurrentStep] = useState(0);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { generation, reset, ui, result } = useCreateTripStore(
+  const { generation, reset, openGenerateDialog, result } = useCreateTripStore(
     useShallow((state) => ({
       generation: state.generation,
-      ui: state.ui,
+      openGenerateDialog: state.openGenerateDialog,
       reset: state.reset,
       result: state.result,
     })),
   );
-  
+
   const errorType = generation.error;
-  
+
   const isLoading = generation.status === "loading";
   const isSuccess = generation.status === "success";
   const isError = generation.status === "error";
   const isOffline = generation.status === "offline";
   const isLimit = generation.status === "limit";
-  
 
   useEffect(() => {
     if (!isLoading) return;
@@ -72,7 +76,7 @@ export function AILoadingDialog({
   }, [isLoading]);
 
   return (
-    <Dialog open={ui.openGenerateDialog}>
+    <Dialog open={openGenerateDialog}>
       <DialogContent className="sm:max-w-md [&>button]:hidden">
         <div className="flex flex-col items-center space-y-6 py-4">
           {/* ICON / IMAGE */}
@@ -82,7 +86,7 @@ export function AILoadingDialog({
             )}
 
             {isSuccess && <CheckCircle2 className="h-10 w-10 text-green-500" />}
-            {isLimit && <Clock className="h-10 w-10 text-orange-500" />  }
+            {isLimit && <Clock className="h-10 w-10 text-orange-500" />}
             {isError && <XCircle className="h-10 w-10 text-red-500" />}
             {isOffline && <XCircle className="h-10 w-10 text-red-500" />}
           </div>
@@ -92,7 +96,7 @@ export function AILoadingDialog({
             <DialogTitle className="text-lg font-medium">
               {isLoading && "Creating a travel plan for you"}
               {isSuccess && "Completed!"}
-              {isLimit && "Daily Limit Reached"  }
+              {isLimit && "Daily Limit Reached"}
               {isError && "Something went wrong"}
               {isOffline && "No Internet Connection"}
             </DialogTitle>
@@ -101,7 +105,8 @@ export function AILoadingDialog({
               {isLoading && "Please wait while our AI creates your travel plan"}
               {isSuccess && "Your travel plan is ready to view"}
               {isLimit && "Unfortunately You've reached daily limit (3x)"}
-              {isError && (ERROR_UI_MAP[errorType]?.message || "something went wrong")}
+              {isError &&
+                (ERROR_UI_MAP[errorType]?.message || "something went wrong")}
               {isOffline &&
                 "Your Connection seems unstable, please check your internet and try again"}
             </DialogDescription>
@@ -109,24 +114,22 @@ export function AILoadingDialog({
 
           {isLimit && (
             <>
-             <div className="bg-muted rounded-lg p-4 flex items-start gap-3 mt-4">
-          <Calendar className="w-5 h-5 text-blue-500 mt-0.5" />
-          <div className="text-sm">
-            <p className="font-medium">
-              Your Daily Limit: 3 Times
-            </p>
-            <p className="text-muted-foreground">
-              You&apos;ll be able to use it again ~ {getTimeUntilReset()}
-            </p>
-          </div>
-        </div>
-             <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 flex items-start gap-3 mt-3">
-          <Lightbulb className="w-5 h-5 text-purple-500 mt-0.5" />
-          <p className="text-sm text-purple-700">
-            Tip: plan ahead and make the most of your daily tries ! ✨
-          </p>
-        </div>
-        </>
+              <div className="bg-muted rounded-lg p-4 flex items-start gap-3 mt-4">
+                <Calendar className="w-5 h-5 text-blue-500 mt-0.5" />
+                <div className="text-sm">
+                  <p className="font-medium">Your Daily Limit: 3 Times</p>
+                  <p className="text-muted-foreground">
+                    You&apos;ll be able to use it again ~ {getTimeUntilReset()}
+                  </p>
+                </div>
+              </div>
+              <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 flex items-start gap-3 mt-3">
+                <Lightbulb className="w-5 h-5 text-purple-500 mt-0.5" />
+                <p className="text-sm text-purple-700">
+                  Tip: plan ahead and make the most of your daily tries ! ✨
+                </p>
+              </div>
+            </>
           )}
 
           {/* 🔥 PROGRESS (ONLY LOADING) */}
@@ -176,15 +179,22 @@ export function AILoadingDialog({
           )} */}
 
           {isSuccess && (
-            <Link to={"/view-trip/" + result.tripId}>
-              <Button>View the plan!</Button>
-            </Link>
+            <Button
+              className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition"
+              onClick={() => {
+                reset();
+                useCreateTripStore.persist.clearStorage()
+                navigate(`/view-trip/${result.tripId}`);
+              }}
+            >
+              View the plan!
+            </Button>
           )}
 
           {isError && (
             <div className="flex gap-2">
               <Button
-              className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition"
+                className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition"
                 onClick={() => {
                   reset();
                   onRetry();
@@ -202,28 +212,30 @@ export function AILoadingDialog({
               </Button>
             </div>
           )}
-           {isLimit && (
+          {isLimit && (
             <div className="flex gap-2">
               <Button
-              className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition"
+                className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition"
                 onClick={() => {
-                  reset()
-                 navigate('/')
+                  reset();
+                  useCreateTripStore.persist.clearStorage()
+                  navigate("/");
                 }}
               >
+                
                 Try Again Tomorrow
               </Button>
               <Button
                 variant="outline"
                 onClick={() => {
-                 reset()
+                  reset();
                 }}
               >
                 Close
               </Button>
             </div>
           )}
-          
+
           {isOffline && (
             <div className="flex gap-2">
               <Button
