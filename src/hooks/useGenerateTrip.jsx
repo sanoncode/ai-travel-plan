@@ -9,6 +9,7 @@ export const useGenerateTrip = () => {
       setUi: state.setUi,
       setGeneration: state.setGeneration,
       setResult: state.setResult,
+      
     })),
   );
   const generateTrip = async ({ formData, user }) => {
@@ -56,6 +57,7 @@ export const useGenerateTrip = () => {
     });
 
     setGeneration({ status: "success", error: null });
+
   };
 
   return {

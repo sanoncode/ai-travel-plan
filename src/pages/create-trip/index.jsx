@@ -15,6 +15,7 @@ import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useShallow } from "zustand/react/shallow";
 import { useGenerateTrip } from "@/hooks/useGenerateTrip";
 import { useTripForm } from "@/hooks/useTripForm";
+import { useEffect } from "react";
 
 function CreateTrip() {
   const { user, openLoginDialog, setOpenLoginDialog } = useUserStore(
@@ -24,32 +25,36 @@ function CreateTrip() {
       setOpenLoginDialog: state.setOpenLoginDialog,
     })),
   );
-  const {
-    formData,
-    ui,
-    generation,
-    setField,
-  } = useCreateTripStore(
+  const { formData, isDaysInvalid, generateAfterLogin, generation, setField, setUi } = useCreateTripStore(
     useShallow((state) => ({
       formData: state.formData,
-      ui: state.ui,
+      isDaysInvalid: state.isDaysInvalid,
+      generateAfterLogin: state.generateAfterLogin,
+      setUi: state.setUi,
       generation: state.generation,
       setField: state.setField,
     })),
   );
 
+  useEffect(()=>{
+    console.log(generateAfterLogin,' generationAfter di useEffec')
+
+    if(user && generateAfterLogin){
+      generateTrip({ formData, user });
+    }
+
+  },[user])
+
   const { validateForm, setDays } = useTripForm();
   const { isValid, message } = validateForm();
   const { generateTrip } = useGenerateTrip();
-
-  console.log(formData, 'form data')
-
 
   const OnGenerateTrip = async () => {
     // ========================
     // AUTH GUARD
     // ========================
     if (!user) {
+      setUi("generateAfterLogin", true);
       setOpenLoginDialog(true);
       return;
     }
@@ -58,8 +63,9 @@ function CreateTrip() {
       toast(message);
       return;
     }
-    generateTrip({ formData, user })
 
+    generateTrip({ formData, user });
+ 
   };
 
   return (
@@ -102,7 +108,7 @@ function CreateTrip() {
             placeholder={"Ex. 3"}
             type="number"
             className={
-              ui.isDaysInvalid ? "border-red-500 border-s" : "border-gray-300"
+              isDaysInvalid ? "border-red-500 border-s" : "border-gray-300"
             }
             min={1}
             max={7}
@@ -155,7 +161,7 @@ function CreateTrip() {
       <div className="my-10 flex justify-end">
         <Button
           onClick={OnGenerateTrip}
-          disabled={ ui.isDaysInvalid || generation.status === "loading"}
+          disabled={isDaysInvalid || generation.status === "loading"}
         >
           {generation.status === "loading" ? (
             <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />

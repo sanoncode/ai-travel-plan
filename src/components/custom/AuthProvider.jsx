@@ -4,40 +4,34 @@ import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 
 function AuthProvider({ children }) {
+  const { setUser, removeUser } = useUserStore(
+    useShallow((state) => ({
+      setUser: state.setUser,
+      removeUser: state.removeUser,
+    })),
+  );
 
-    const {
-        setUser,
-        removeUser
-    } = useUserStore(useShallow((state) => ({
-        setUser: state.setUser,
-        removeUser: state.removeUser
-    })))
-
-    useEffect(() => {
-
+  useEffect(() => {
+   
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user) setUser(data.user);
+      else removeUser();
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
         // const hash = window.location.hash;
 
         // if (hash && hash.includes("access_token")) {
-        //     window.history.replaceState(
-        //         null,
-        //         "",
-        //         window.location.pathname
-        //     );
+        //   window.history.replaceState(null, "", window.location.pathname);
         // }
-        supabase.auth.getUser().then(({ data }) => {
-            if (data?.user) setUser(data.user)
-            else removeUser()
-        })
-        const { data: listener } = supabase.auth.onAuthStateChange(
-            (_event, session) => {
-                if (session?.user) setUser(session.user)
-                else removeUser()
-            }
-        )
-        return () => listener.subscription.unsubscribe();
-    }, [])
+        if (session?.user) setUser(session.user);
+        else removeUser();
+      },
+    );
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
-    return children
+  return children;
 }
 
-export default AuthProvider
+export default AuthProvider;
