@@ -10,23 +10,30 @@ import {
 import GoogleLoginDialog from "@/components/custom/GoogleLoginDialog";
 import Images from "./Images";
 import { useShallow } from "zustand/react/shallow";
+import { useCreateTripStore } from "@/store/useCreateTripStore";
 
 function Header() {
-  const { user, removeUser, openLoginDialog, setOpenLoginDialog } = useUserStore(
-    useShallow((state) => ({
-      user: state.user,
-      openLoginDialog: state.openLoginDialog,
-      removeUser: state.removeUser,
-      setOpenLoginDialog: state.setOpenLoginDialog,
-    })),
-  );
+  const { user, removeUser, openLoginDialog, setOpenLoginDialog } =
+    useUserStore(
+      useShallow((state) => ({
+        user: state.user,
+        openLoginDialog: state.openLoginDialog,
+        removeUser: state.removeUser,
+        setOpenLoginDialog: state.setOpenLoginDialog,
+      })),
+    );
+
+  const reset = useCreateTripStore((state) => state.reset);
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut()
-    if(error) console.log(error)
-      removeUser();
-      window.location.replace("/");
-    };
+    reset()
+    useCreateTripStore.persist.clearStorage()
+    
+    const { error } = await supabase.auth.signOut();
+    if (error) console.log(error);
+    removeUser();
+    window.location.replace("/");
+  };
 
   return (
     <>
@@ -62,12 +69,8 @@ function Header() {
                 />
               </PopoverTrigger>
               <PopoverContent>
-                <h2
-                  className="cursor-pointer"
-                  onClick={() => handleLogout()}
-                  >
+                <h2 className="cursor-pointer" onClick={() => handleLogout()}>
                   Logout
-          
                 </h2>
               </PopoverContent>
             </Popover>
@@ -87,7 +90,10 @@ function Header() {
             </Button>
           </div>
         )}
-        <GoogleLoginDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
+        <GoogleLoginDialog
+          open={openLoginDialog}
+          setOpen={setOpenLoginDialog}
+        />
       </nav>
     </>
   );
