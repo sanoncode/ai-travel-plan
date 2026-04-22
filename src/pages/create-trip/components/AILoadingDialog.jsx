@@ -217,8 +217,8 @@ export function AILoadingDialog({ onRetry }) {
               <Button
                 className="px-6 py-2 bg-[#E07A5F] text-white rounded-full font-semibold hover:bg-[#d0694e] transition"
                 onClick={() => {
-                  useCreateTripStore.persist.clearStorage()
                   reset();
+                  useCreateTripStore.persist.clearStorage()
                   navigate("/");
                 }}
               >
