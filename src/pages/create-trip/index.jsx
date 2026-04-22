@@ -37,7 +37,7 @@ function CreateTrip() {
   );
 
   useEffect(()=>{
-    console.log(generateAfterLogin,' generationAfter di useEffec')
+   
 
     if(user && generateAfterLogin){
       generateTrip({ formData, user });
