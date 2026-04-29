@@ -1,22 +1,21 @@
-import path from "path"
-import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
-
+import path from "path";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [
-    react(),
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       // eslint-disable-next-line no-undef
       "@": path.resolve(__dirname, "./src"),
     },
-   
   },
-   server: {
-      hmr: {
-        overlay: false
-      }
-    }
-})
+  server: {
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
+    hmr: {
+      overlay: false,
+    },
+  },
+});
