@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import {
-  Calendar,
+  // Calendar,
   MapPin,
   Plane,
 } from "lucide-react"
@@ -18,10 +18,10 @@ function TripHeader({header}){
         </div>
         <h1 className="text-4xl font-bold tracking-tight">{trip_header?.title}</h1>
         <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1.5">
+          {/* <div className="flex items-center gap-1.5">
             <Calendar size={16} />
             <span>{trip_header?.dates}</span>
-          </div>
+          </div> */}
           <div className="flex items-center gap-1.5">
             <MapPin size={16} />
             <span>{trip_header?.route}</span>
