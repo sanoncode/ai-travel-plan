@@ -4,11 +4,12 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
-  TripHeader,
   TripItinerary,
   TripBudget,
   TripNotes,
+  TripHeader
 } from "../components";
+
 import { useGetTrips } from "@/hooks/useGetTrips";
 import { useTripStore } from "@/store/useTripStore";
 import { useShallow } from "zustand/react/shallow";

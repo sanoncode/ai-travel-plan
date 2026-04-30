@@ -30,10 +30,10 @@ export default async function handler(req, res) {
     }
 
     const userId = user.id;
-    console.log(user, "user")
 
 
-    const isLimitReached = await checkLimitTrip(userId)
+
+    const isLimitReached = await checkLimitTrip({userId})
     
     if (isLimitReached) {
 
@@ -85,6 +85,9 @@ export default async function handler(req, res) {
         error: API_ERRORS.AI_FAILED,
       });
     }
+      const now = new Date()
+      const createdDate = now.toISOString().split("T")[0] 
+      // hasil: "2026-04-30" || hari ini
 
     const data = await aiResponse.json();
 
@@ -97,6 +100,7 @@ export default async function handler(req, res) {
           user_id: userId,
           form_data: formData,
           result: parsed,
+          created_date: createdDate
         },
       ])
       .select()
@@ -109,7 +113,7 @@ export default async function handler(req, res) {
 
     res.status(200).json(trip);
   } catch (err) {
-    
+    console.log(err, 'err')
     res.status(500).json({ error: API_ERRORS.UNKNOWN_ERROR });
   }
 }

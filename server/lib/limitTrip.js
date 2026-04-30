@@ -1,22 +1,43 @@
-import { supabase } from './supabaseServer.js'
+import { supabase } from "./supabaseServer.js";
 
-export const checkLimitTrip = async (userId) => {
+// const getUTCdayRange = (date = new Date()) => {
 
-    const now = new Date()
+//     const start = new Date(Date.UTC(
+//         date.getUTCFullYear(),
+//         date.getUTCMonth(),
+//         date.getUTCDate(),
+//         0,0,0,0
+//     ))
 
-    const startOfTheDay = new Date(now.setHours(0,0,0,0)).toISOString()
+//      const end = new Date(Date.UTC(
+//         date.getUTCFullYear(),
+//         date.getUTCMonth(),
+//         date.getUTCDate(),
+//         23,59,59,999
+//     ))
 
-    const endOfTheDay = new Date(now.setHours(23,59,59,999)).toISOString()
-    
-    const { count, error } = await supabase
-    .from('trips')
-    .select('*', { count: "exact", head: true })
-    .eq('user_id', userId )
-    .gte('created_at', startOfTheDay)
-    .lte('created_at', endOfTheDay)
+//     return {
+//         start: start.toISOString(),
+//         end: end.toISOString()
+//     }
+// }
 
-    if(error) throw error;
+export const checkLimitTrip = async ({ userId, limit = 3 }) => {
+  // const { start, end } = getUTCdayRange(date)
+  const now = new Date();
 
-    return count >= 3;
-}
+  const createdDate = now.toISOString().split("T")[0];
 
+  const { count, error } = await supabase
+    .from("trips")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .eq("created_date", createdDate);
+
+  // .gte('created_at', start)
+  // .lte('created_at', end)
+
+  if (error) throw error;
+
+  return count >= limit;
+};
