@@ -4,21 +4,26 @@ import { useTripStore } from "@/store/useTripStore";
 import { useShallow } from "zustand/shallow";
 
 export const useGetTrips = () => {
-  const {
-    setTrip,
-    setTrips,
-    setLoading,
-    setErrorTrip,
-  } = useTripStore(
-    useShallow((state) => ({
-      setTrips: state.setTrips,
-      setLoading: state.setLoading,
-      setErrorTrip: state.setErrorTrip,
-      setTrip: state.setTrip,
-    })),
-  );
+   const {
+      userTrips,
+      setTrip,
+      setTrips,
+      setLoading,
+      setErrorTrip,
+    } = useTripStore(
+      useShallow((state) => ({
+        userTrips: state.userTrips,
+        setTrips: state.setTrips,
+        setLoading: state.setLoading,
+        setErrorTrip: state.setErrorTrip,
+        setTrip: state.setTrip,
+
+      })),
+    );
 
   const GetUserTrips = async (userId) => {
+
+
     // =======================
     // START LOADING
     // =======================
@@ -28,7 +33,7 @@ export const useGetTrips = () => {
 
     if (error) {
       setErrorTrip(error.message);
-      return
+      return;
     }
     // =======================
     // SET TRIPS
@@ -38,16 +43,17 @@ export const useGetTrips = () => {
   };
 
   const GetUserTrip = async (tripId) => {
+
     //  =======================
     // START LOADING
     // =======================
     setLoading(true);
 
     const [trip, error] = await safeAsync(() => fetchUserTripById(tripId));
- 
+
     if (error) {
       setErrorTrip(error.message);
-      return
+      return;
     }
     // =======================
     // SET TRIP

@@ -31,8 +31,13 @@ function MyTrip() {
       navigate("/");
       return;
     }
+    
+    if(userTrips.length > 0){
+        console.log('kena')
+        return;
+    }
     GetUserTrips(user?.id);
-  }, [user, navigate]);
+  }, [user, navigate, userTrips ]);
 
   if (errorTrip) {
     return <ErrorPage />;

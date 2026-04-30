@@ -8,6 +8,7 @@ export const useTripStore = create((set) => ({
   currentTrip: null,
   loading: false,
   errorTrip: null,
+  lastFetchedUserId: null,
 
   // ===
   // userTrips
@@ -48,11 +49,18 @@ export const useTripStore = create((set) => ({
     })
   },
 
+  setLastFetchedUserId: (id) => {
+    set({
+      lastFetchedUserId: id
+    })
+},
+
   reset: () =>
     set({
       userTrips: [],
       currentTrip: null,
       loading: false,
-      error: null
+      error: null,
+      lastFetchedUserId: null,
     }),
 }));
