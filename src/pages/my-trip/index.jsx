@@ -45,6 +45,8 @@ function MyTrip() {
           <SkeletonCard />
         ) : userTrips?.length > 0 ? (
           userTrips.map((trip, index) => (
+
+            // <TripHeader key={index} trip={trip}/>
             <UserTripCarditem key={index} trip={trip} />
           ))
         ) : (
