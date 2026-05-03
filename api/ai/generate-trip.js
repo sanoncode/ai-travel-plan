@@ -31,8 +31,6 @@ export default async function handler(req, res) {
 
     const userId = user.id;
 
-
-
     const isLimitReached = await checkLimitTrip({userId})
     
     if (isLimitReached) {

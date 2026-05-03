@@ -40,10 +40,11 @@ function CreateTrip() {
    
 
     if(user && generateAfterLogin){
+      setUi("generateAfterLogin", false);
       generateTrip({ formData, user });
     }
 
-  },[user])
+  },[user?.id, generateAfterLogin])
 
   const { validateForm, setDays } = useTripForm();
   const { isValid, message } = validateForm();

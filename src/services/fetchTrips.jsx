@@ -1,6 +1,5 @@
-import { normalizeTrip } from "@/lib/utils";
+import { normalizeTrip, normalizeTrips } from "@/lib/utils";
 import { supabase } from "@/lib/supabaseClient";
-import { normalizeTrips } from "@/lib/utils";
 
 const fetchUserTrips = async (userId) => {
 
