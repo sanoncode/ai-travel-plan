@@ -11,6 +11,7 @@ import GoogleLoginDialog from "@/components/custom/GoogleLoginDialog";
 import Images from "./Images";
 import { useShallow } from "zustand/react/shallow";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
+import { useTripStore } from "@/store/useTripStore";
 
 function Header() {
   const { user, removeUser, openLoginDialog, setOpenLoginDialog } =
@@ -23,16 +24,22 @@ function Header() {
       })),
     );
 
-  const reset = useCreateTripStore((state) => state.reset);
+  const resetCreateTripStore = useCreateTripStore((state) => state.reset);
+  const resetTripStore = useTripStore((state) => state.reset);
 
   const handleLogout = async () => {
-    reset()
-    useCreateTripStore.persist.clearStorage()
-    
+  
     const { error } = await supabase.auth.signOut();
     if (error) console.log(error);
-    removeUser();
     window.location.replace("/");
+    removeUser();
+    
+    resetCreateTripStore()
+    resetTripStore()
+
+    useCreateTripStore.persist.clearStorage()
+    useTripStore.persist.clearStorage()
+   
   };
 
   return (
