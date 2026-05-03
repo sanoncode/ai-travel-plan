@@ -4,45 +4,62 @@ import { useTripStore } from "@/store/useTripStore";
 import { useShallow } from "zustand/shallow";
 
 export const useGetTrips = () => {
-   const {
-      userTrips,
-      setTrip,
-      setTrips,
-      setLoading,
-      setErrorTrip,
-    } = useTripStore(
-      useShallow((state) => ({
-        userTrips: state.userTrips,
-        setTrips: state.setTrips,
-        setLoading: state.setLoading,
-        setErrorTrip: state.setErrorTrip,
-        setTrip: state.setTrip,
-
-      })),
-    );
+  const {
+    setTrip,
+    setTrips,
+    setLoading,
+    setErrorTrip,
+    setLastFetchedUserId,
+    setCurrentTripId
+  } = useTripStore(
+    useShallow((state) => ({
+      setTrips: state.setTrips,
+      setLoading: state.setLoading,
+      setErrorTrip: state.setErrorTrip,
+      setTrip: state.setTrip,
+      setLastFetchedUserId: state.setLastFetchedUserId,
+      setCurrentTripId: state.setCurrentTripId
+    })),
+  );
 
   const GetUserTrips = async (userId) => {
 
+      const { userTrips, lastFetchedUserId } = useTripStore.getState()
+      const isCached = userTrips.length > 0 && lastFetchedUserId === userId
+ 
+      if(isCached){
+        return;
+      }
 
-    // =======================
-    // START LOADING
-    // =======================
-    setLoading(true);
+ 
+      setLoading(true)
+      const [trips, error] = await safeAsync(() => fetchUserTrips(userId));
+     
 
-    const [trips, error] = await safeAsync(() => fetchUserTrips(userId));
-
-    if (error) {
-      setErrorTrip(error.message);
+      if (error) {
+        setErrorTrip(error.message);
+        setLoading(false)
+        return;
+      }
+      // =======================
+      // SET TRIPS
+      // =======================
+      setTrips(trips);
+      setLastFetchedUserId(userId)
+      setLoading(false);
       return;
-    }
-    // =======================
-    // SET TRIPS
-    // =======================
-    setTrips(trips);
-    setLoading(false);
+     
   };
 
   const GetUserTrip = async (tripId) => {
+
+     const { currentTripId } = useTripStore.getState()
+
+     const isCached = tripId === currentTripId 
+ 
+      if(isCached){
+        return;
+      }
 
     //  =======================
     // START LOADING
@@ -53,12 +70,14 @@ export const useGetTrips = () => {
 
     if (error) {
       setErrorTrip(error.message);
+      setLoading(false);
       return;
     }
     // =======================
     // SET TRIP
     // =======================
     setTrip(trip);
+    setCurrentTripId(tripId)
     setLoading(false);
   };
 

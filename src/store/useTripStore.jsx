@@ -1,66 +1,87 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-export const useTripStore = create((set) => ({
-  // ===
-  // data
-  // ===
-  userTrips: [],
-  currentTrip: null,
-  loading: false,
-  errorTrip: null,
-  lastFetchedUserId: null,
+export const useTripStore = create(
 
-  // ===
-  // userTrips
-  // ===
+  persist((set) => ({
+    // ===
+    // data
+    // ===
+    userTrips: [],
+    currentTrip: null,
+    currentTripId: null,
+    loading: false,
+    errorTrip: null,
+    lastFetchedUserId: null,
 
-  setTrips: (trips) => {
-    set({
-      userTrips: trips,
-      loading: false,
-    });
-  },
+    // ===
+    // userTrips
+    // ===
 
-  // ===
-  // currentTrip
-  // ===
+    setTrips: (trips) => {
+      set({
+        userTrips: trips,
+        loading: false,
+      });
+    },
 
-  setTrip: (trip) => {
-    set({
-      currentTrip: trip,
-      loading: false,
-    });
-  },
+    // ===
+    // currentTrip
+    // ===
 
-  // ===
-  // loading
-  // ===
-  setLoading: (value) =>{
-    set({
-      loading: value
-    })
-  },
-  // ===
-  // error
-  // ===
-  setErrorTrip: (error) =>{
-    set({
-      errorTrip: error
-    })
-  },
+    setTrip: (trip) => {
+      set({
+        currentTrip: trip,
+        loading: false,
+      });
+    },
 
-  setLastFetchedUserId: (id) => {
-    set({
-      lastFetchedUserId: id
-    })
-},
+    // ===
+    // loading
+    // ===
+    setLoading: (value) => {
+      set({
+        loading: value
+      })
+    },
+    // ===
+    // error
+    // ===
+    setErrorTrip: (error) => {
+      set({
+        errorTrip: error
+      })
+    },
 
-  reset: () =>
-    set({
-      userTrips: [],
-      currentTrip: null,
-      loading: false,
-      error: null,
-      lastFetchedUserId: null,
-    }),
-}));
+    setLastFetchedUserId: (id) => {
+      set({
+        lastFetchedUserId: id
+      })
+    },
+
+    setCurrentTripId: (id) => {
+      set({
+        currentTripId: id
+      })
+    },
+
+    reset: () =>
+      set({
+        userTrips: [],
+        currentTrip: null,
+        loading: false,
+        error: null,
+        lastFetchedUserId: null,
+      })
+
+  }),
+    {
+      name: "trip_data",
+      partialize: (state) => ({
+        userTrips: state.userTrips,
+        currentTripId: state.currentTripId,
+        currentTrip: state.currentTrip,
+        lastFetchedUserId: state.lastFetchedUserId
+      }),
+    },
+  ));

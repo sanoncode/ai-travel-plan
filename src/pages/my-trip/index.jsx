@@ -18,7 +18,7 @@ function MyTrip() {
   const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
   const { GetUserTrips } = useGetTrips();
-  const { userTrips, loading, errorTrip } = useTripStore(
+  const { userTrips, loading, errorTrip, lastFetchedUserId } = useTripStore(
     useShallow((state) => ({
       userTrips: state.userTrips,
       loading: state.loading,
@@ -31,17 +31,14 @@ function MyTrip() {
       navigate("/");
       return;
     }
-    
-    if(userTrips.length > 0){
-        console.log('kena')
-        return;
-    }
     GetUserTrips(user?.id);
-  }, [user, navigate, userTrips ]);
+  }, [user]);
 
   if (errorTrip) {
     return <ErrorPage />;
   }
+ 
+
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl-px-10 px-5 mt-10">
       <h2 className="font-bold text-3xl">My Trips</h2>
@@ -50,8 +47,6 @@ function MyTrip() {
           <SkeletonCard />
         ) : userTrips?.length > 0 ? (
           userTrips.map((trip, index) => (
-
-            // <TripHeader key={index} trip={trip}/>
             <UserTripCarditem key={index} trip={trip} />
           ))
         ) : (
