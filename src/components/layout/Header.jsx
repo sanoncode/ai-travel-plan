@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/popover";
 
 import GoogleLoginDialog from "@/components/custom/GoogleLoginDialog";
-import Images from "./Images";
+import Images from "../custom/Images";
 import { useShallow } from "zustand/react/shallow";
 import { useCreateTripStore } from "@/store/useCreateTripStore";
 import { useTripStore } from "@/store/useTripStore";
