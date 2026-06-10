@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 
 export default function RootLayout() {
   return (
-    <div className=" min-h-screen bg-[url('/city-map.png')] bg-repeat">
+    <div className=" min-h-screen bg-repeat">
       <Header />
 
       <main>
